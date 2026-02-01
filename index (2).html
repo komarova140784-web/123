@@ -1,0 +1,3227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ХОЗЯЕВА EMPIRE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+:root {
+  --primary: #702acc;
+  --primary-light: #8c5cda;
+  --primary-dark: #5c1db1;
+  --secondary: #b05df2;
+  --text: #4f4f4f;
+  --text-light: #6b7280;
+  --bg: #f7f7f7;
+  --card-bg: #ffffff;
+  --danger: #ee0d0d;
+  --danger-hover: #c50c0c;
+  --shadow: 0 4px 12px rgba(112, 42, 204, 0.15);
+  --radius: 16px;
+  --container-max-width: 1200px;
+  --card-min-height: auto;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden; 
+}
+
+header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(45deg, var(--primary-light), var(--secondary));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.profile-icon {
+  margin-left: auto;
+  width: 32px;
+  height: 32px;
+  background: var(--card-bg);
+  border-radius: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.profile-icon:hover {
+  transform: scale(1.05);
+}
+
+.profile-icon svg {
+  fill: var(--primary);
+  width: 18px;
+  height: 18px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: var(--container-max-width);
+  margin: 32px auto;
+  padding: 0 20px;
+  gap: 24px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+    margin: 16px auto;
+    gap: 16px;
+  }
+  
+  header {
+    padding: 0 16px;
+    height: 50px;
+  }
+}
+
+.radio-inputs {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 1rem;
+  background: linear-gradient(145deg, #e6e6e6, #ffffff);
+  box-sizing: border-box;
+  box-shadow:
+    5px 5px 15px rgba(0, 0, 0, 0.15),
+    -5px -5px 15px rgba(255, 255, 255, 0.8);
+  padding: 0.5rem;
+  width: 100%;
+  font-size: 14px;
+  gap: 0.5rem;
+}
+
+.radio-inputs .radio {
+  flex: 1 1 auto;
+  text-align: center;
+  position: relative;
+}
+
+.radio-inputs .radio input {
+  display: none;
+}
+
+.radio-inputs .radio .name {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.7rem;
+  border: none;
+  padding: 0.7rem 0;
+  color: #2d3748;
+  font-weight: 500;
+  font-family: inherit;
+  background: linear-gradient(145deg, #ffffff, #e6e6e6);
+  box-shadow:
+    3px 3px 6px rgba(0, 0, 0, 0.1),
+    -3px -3px 6px rgba(255, 255, 255, 0.7);
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.radio-inputs .radio input:checked + .name {
+  background: linear-gradient(145deg, #7300ffff, #7300ffff);
+  color: white;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+    inset -2px -2px 5px rgba(255, 255, 255, 0.1),
+    3px 3px 8px rgba(59, 130, 246, 0.3);
+  transform: translateY(2px);
+}
+
+.radio-inputs .radio:hover .name {
+  background: linear-gradient(145deg, #f0f0f0, #ffffff);
+  transform: translateY(-1px);
+  box-shadow:
+    4px 4px 8px rgba(0, 0, 0, 0.1),
+    -4px -4px 8px rgba(255, 255, 255, 0.8);
+}
+
+.radio-inputs .radio:hover input:checked + .name {
+  transform: translateY(1px);
+}
+
+.radio-inputs .radio input:checked + .name {
+  animation: select 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.radio-inputs .radio .name::before,
+.radio-inputs .radio .name::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.radio-inputs .radio input:checked + .name::before,
+.radio-inputs .radio input:checked + .name::after {
+  animation: particles 0.8s ease-out forwards;
+}
+
+.radio-inputs .radio .name::before {
+  background: #60a5fa;
+  box-shadow: 0 0 6px #60a5fa;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.radio-inputs .radio .name::after {
+  background: #93c5fd;
+  box-shadow: 0 0 8px #93c5fd;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.radio-inputs .radio .name::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    circle at var(--x, 50%) var(--y, 50%),
+    rgba(59, 130, 246, 0.3) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.radio-inputs .radio input:checked + .name::after {
+  opacity: 1;
+  animation: sparkle-bg 1s ease-out forwards;
+}
+
+.radio-inputs .radio input:checked + .name {
+  overflow: visible;
+}
+
+.radio-inputs .radio input:checked + .name::before {
+  box-shadow:
+    0 0 6px #60a5fa,
+    10px -10px 0 #60a5fa,
+    -10px -10px 0 #60a5fa;
+  animation: multi-particles-top 0.8s ease-out forwards;
+}
+
+.radio-inputs .radio input:checked + .name::after {
+  box-shadow:
+    0 0 8px #93c5fd,
+    10px 10px 0 #93c5fd,
+    -10px 10px 0 #93c5fd;
+  animation: multi-particles-bottom 0.8s ease-out forwards;
+}
+
+@keyframes select {
+  0% {
+    transform: scale(0.95) translateY(2px);
+  }
+  50% {
+    transform: scale(1.05) translateY(-1px);
+  }
+  100% {
+    transform: scale(1) translateY(2px);
+  }
+}
+
+@keyframes multi-particles-top {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  40% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px) scale(0);
+    box-shadow:
+      0 0 6px transparent,
+      20px -20px 0 transparent,
+      -20px -20px 0 transparent;
+  }
+}
+
+@keyframes multi-particles-bottom {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  40% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px) scale(0);
+    box-shadow:
+      0 0 8px transparent,
+      20px 20px 0 transparent,
+      -20px 20px 0 transparent;
+  }
+}
+
+@keyframes sparkle-bg {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+.radio-inputs .radio .name::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--x, 50%) var(--y, 50%),
+    rgba(255, 255, 255, 0.5) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.radio-inputs .radio input:checked + .name::before {
+  animation: ripple 0.8s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    opacity: 1;
+    transform: scale(0.2);
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.5);
+  }
+}
+
+@keyframes border-glow {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes select {
+  0% {
+    transform: scale(0.95) translateY(2px);
+  }
+  50% {
+    transform: scale(1.05) translateY(-1px);
+  }
+  100% {
+    transform: scale(1) translateY(2px);
+  }
+}
+
+@keyframes multi-particles-top {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  40% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px) scale(0);
+    box-shadow: 0 0 6px transparent, 20px -20px 0 transparent,
+                -20px -20px 0 transparent;
+  }
+}
+
+@keyframes multi-particles-bottom {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  40% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px) scale(0);
+    box-shadow: 0 0 8px transparent, 20px 20px 0 transparent,
+                -20px 20px 0 transparent;
+  }
+}
+
+@keyframes ripple {
+  0% {
+    opacity: 1;
+    transform: scale(0.2);
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.5);
+  }
+}
+
+@keyframes sparkle-bg {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+.Download-button {
+  display: flex;
+  align-items: center;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 17px;
+  padding: 12px 20px;
+  color: white;
+  background: rgb(103, 92, 156);
+  border: none;
+  box-shadow: 0 0.7em 1.5em -0.5em rgba(59, 48, 78, 0.527);
+  letter-spacing: 0.05em;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+}
+
+.Download-button svg {
+  margin-right: 8px;
+  width: 25px;
+}
+
+.Download-button:hover {
+  box-shadow: 0 0.5em 1.5em -0.5em rgba(88, 71, 116, 0.627);
+}
+
+.Download-button:active {
+  box-shadow: 0 0.3em 1em -0.5em rgba(88, 71, 116, 0.627);
+}
+
+.Download-button::before {
+  content: "";
+  width: 4px;
+  height: 40%;
+  background-color: white;
+  position: absolute;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  left: 0;
+  transition: all 0.2s;
+}
+
+.Download-button::after {
+  content: "";
+  width: 4px;
+  height: 40%;
+  background-color: white;
+  position: absolute;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  right: 0;
+  transition: all 0.2s;
+}
+
+.Download-button:hover::before,
+.Download-button:hover::after {
+  height: 60%;
+}
+
+@keyframes border-glow {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.content-section {
+  display: none;
+}
+
+.content-section.active {
+  display: block;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 24px 32px;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 24px;
+  min-height: var(--card-min-height);
+  width: 100%;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(112, 42, 204, 0.2);
+}
+
+.card h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card h2 svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--secondary);
+  cursor: pointer;
+}
+
+.user-profile {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 24px;
+  align-items: start;
+  width: 100%;
+}
+
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 30%;
+  border: 4px solid var(--primary);
+  box-shadow: 0 4px 16px rgba(112, 42, 204, 0.3);
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(112, 42, 204, 0.4);
+}
+
+.user-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.info-row {
+  padding: 12px 16px;
+  background-color: rgba(112, 42, 204, 0.05);
+  border-radius: 12px;
+  font-size: 16px;
+  user-select: text;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.info-row:hover {
+  background-color: rgba(112, 42, 204, 0.1);
+}
+
+.info-row strong {
+  color: var(--primary);
+  display: inline-block;
+  min-width: 200px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.badge.admin {
+  background-color: rgba(234, 179, 8, 0.2);
+  color: #ca8a04;
+}
+
+.badge.vip {
+  background: linear-gradient(135deg, #fcd34d, #f59e0b);
+  color: white;
+}
+
+.badge.rank {
+  background-color: rgba(112, 42, 204, 0.2);
+  color: var(--primary);
+}
+
+.stats-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.stat-item {
+  background-color: rgba(112, 42, 204, 0.05);
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.chart-container {
+  margin-top: 24px;
+  width: 100%;
+  height: 400px;
+}
+
+.balances-property {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  width: 100%;
+}
+
+.property-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.peers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 10px;
+  width: 100%;
+}
+
+.peer-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border-radius: var(--radius);
+  background-color: rgba(112, 42, 204, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(112, 42, 204, 0.1);
+  width: 100%;
+}
+
+.peer-item:hover {
+  background-color: rgba(112, 42, 204, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(112, 42, 204, 0.15);
+}
+
+.peer-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+  flex-shrink: 0;
+}
+
+.peer-details {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.peer-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 8px;
+  word-wrap: break-word;
+}
+
+.peer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+.peer-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.peer-meta a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.peer-meta a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.peer-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.peer-button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.peer-button:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-light);
+  width: 100%;
+}
+
+.empty-state svg {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+  fill: var(--text-light);
+  opacity: 0.5;
+}
+
+.empty-state p {
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.action-section {
+  margin-top: 24px;
+  padding: 20px;
+  background: rgba(112, 42, 204, 0.03);
+  border-radius: 12px;
+  width: 100%;
+}
+
+.action-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: end;
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid rgba(112, 42, 204, 0.2);
+  border-radius: 12px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+
+.btn {
+  background-color: var(--primary);
+  border: none;
+  padding: 12px 16px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn.danger {
+  background-color: var(--danger);
+}
+
+.btn.danger:hover {
+  background-color: var(--danger-hover);
+}
+
+.btn.warning {
+  background-color: #f59e0b;
+}
+
+.btn.warning:hover {
+  background-color: #e69008;
+}
+
+.btn.purple {
+  background-color: var(--secondary);
+}
+
+.btn.purple:hover {
+  background-color: #9e46e0;
+}
+
+.user-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.user-card {
+  background: rgba(112, 42, 204, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.user-card:hover {
+  background: rgba(112, 42, 204, 0.1);
+  transform: translateY(-2px);
+}
+
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 18px;
+  word-wrap: break-word;
+}
+
+.user-status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.status-online {
+  background-color: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.status-offline {
+  background-color: rgba(107, 114, 128, 0.2);
+  color: #6b7280;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 9998;
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-indicator {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  background: rgba(255, 255, 255, 0.98);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(112, 42, 204, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(112, 42, 204, 0.1);
+}
+
+.spinner {
+  border: 4px solid rgba(112, 42, 204, 0.1);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-indicator p {
+  font-size: 16px;
+  color: var(--primary);
+  font-weight: 600;
+  margin: 0;
+}
+
+.filter-btn {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--primary-light);
+  background: transparent;
+  color: var(--primary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+.profile-dropdown {
+  position: absolute;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: -117px;
+  top: 100%;
+  background-color: var(--card-bg);
+  min-width: 160px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius);
+  z-index: 1000;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.dropdown-content a {
+  color: var(--text);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  transition: background-color 0.2s;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.dropdown-content a:hover {
+  background-color: rgba(112, 42, 204, 0.1);
+  color: var(--primary);
+}
+
+.dropdown-content a.logout {
+  color: var(--danger);
+}
+
+.dropdown-content a.logout:hover {
+  background-color: rgba(238, 13, 13, 0.1);
+}
+
+.profile-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.day-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  margin: 4px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #f9f5ff;
+  color: #4c1d95;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.day-tab .day-name {
+  font-weight: 600;
+}
+
+.day-tab .day-stats {
+  font-size: 12px;
+  color: #7e22ce;
+}
+
+.day-tab:hover {
+  background: #ede9fe;
+  border-color: #a78bfa;
+  color: #4c1d95;
+}
+
+.day-tab.active {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 2px 6px rgba(124, 58, 237, 0.4);
+}
+
+.day-tab.active .day-stats {
+  color: #e9d5ff;
+}
+
+.day-name {
+  font-weight: 600;
+}
+
+.day-stats {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.finance-count {
+  color: #22c55e;
+}
+
+.system-count {
+  color: #3b82f6;
+}
+
+.activity-section {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  width: 100%;
+}
+
+.activity-header {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+  width: 100%;
+}
+
+.activity-header h2 {
+  color: var(--primary);
+  margin: 0;
+  font-size: 22px;
+}
+
+.activity-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+  width: 100%;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: rgba(112, 42, 204, 0.03);
+  border-radius: 12px;
+  transition: background-color 0.2s;
+  position: relative;
+  width: 100%;
+}
+
+.activity-item:hover {
+  background-color: rgba(112, 42, 204, 0.08);
+}
+
+.activity-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.activity-content {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.activity-title {
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: var(--text);
+  word-wrap: break-word;
+}
+
+.activity-time {
+  font-size: 12px;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.activity-type-1 .activity-icon {
+  color: #10b981;
+}
+
+.activity-type-2 .activity-icon {
+  color: #ef4444;
+}
+
+.activity-icon-green {
+  color: #22c55e;
+  fill: #22c55e;
+}
+
+.activity-icon-red {
+  color: #ef4444;
+  fill: #ef4444;
+}
+
+.activity-icon-blue {
+  color: #3b82f6;
+  fill: #3b82f6;
+}
+
+.activity-type-3 .activity-icon {
+  color: #3b82f6;
+}
+
+.activity-type-4 .activity-icon {
+  color: #f59e0b;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.loading-indicator {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+.loading-indicator.hiding,
+.loading-overlay.hiding {
+  animation: fadeOut 0.3s ease-in;
+  opacity: 0;
+}
+
+.user-stats {
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.weekly-stats {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.status-online + .user-stats .weekly-stats {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+}
+
+.status-offline + .user-stats .weekly-stats {
+  background: rgba(244, 67, 54, 0.1);
+  color: #F44336;
+}
+
+#toastContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.3s ease-in-out;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.hide {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.card1 {
+  width: 330px;
+  height: 80px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  padding: 10px 15px;
+  background-color: #ffffff;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 15px;
+}
+
+.wave {
+  position: absolute;
+  transform: rotate(90deg);
+  left: -31px;
+  top: 32px;
+  width: 80px;
+  fill-opacity: 1;
+}
+
+.icon-container {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin-left: 8px;
+}
+
+.icon {
+  width: 17px;
+  height: 17px;
+}
+
+.success-icon {
+  color: #269b24;
+}
+
+.error-icon {
+  color: #d10d0d;
+}
+
+.message-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex-grow: 1;
+}
+
+.message-text,
+.sub-text {
+  margin: 0;
+  cursor: default;
+}
+
+.message-text {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.sub-text {
+  font-size: 14px;
+  color: #555;
+}
+
+.card1.success .wave {
+  fill: #04e4003a;
+}
+
+.card1.success .icon-container {
+  background-color: #04e40048;
+}
+
+.card1.success .message-text {
+  color: #269b24;
+}
+
+.card1.error .wave {
+  fill: #fc0c0c3a;
+}
+
+.card1.error .icon-container {
+  background-color: #fc0c0c48;
+}
+
+.card1.error .message-text {
+  color: #d10d0d;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background-color: var(--card-bg);
+  margin: 10% auto;
+  padding: 24px;
+  border-radius: var(--radius);
+  width: 90%;
+  max-width: 500px;
+  box-shadow: var(--shadow);
+  animation: slideIn 0.3s ease;
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.close {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: var(--danger);
+}
+
+.form-group-modal {
+  margin-bottom: 20px;
+}
+
+.form-label-modal {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.form-input-modal,
+.form-select-modal {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid rgba(112, 42, 204, 0.2);
+  border-radius: 12px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.form-input-modal:focus,
+.form-select-modal:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+button {
+  padding: 17px 40px;
+  border-radius: 50px;
+  cursor: pointer;
+  border: 0;
+  background-color: white;
+  box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 15px;
+  transition: all 0.5s ease;
+}
+
+button:hover {
+  letter-spacing: 3px;
+  background-color: hsl(261deg 80% 48%);
+  color: hsl(0, 0%, 100%);
+  box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+}
+
+button:active {
+  letter-spacing: 0.1px;
+  background-color: hsl(261deg 80% 48%);
+  color: hsl(0, 0%, 100%);
+  box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+  transform: translateY(10px);
+  transition: 100ms;
+}
+
+/* Улучшенный дизайн логов */
+.logs-container {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.logs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+  width: 100%;
+}
+
+.logs-header h2 {
+  color: var(--primary);
+  margin: 0;
+  font-size: 22px;
+}
+
+.logs-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.logs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 10px;
+  width: 100%;
+}
+
+.log-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background-color: rgba(112, 42, 204, 0.03);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+  width: 100%;
+}
+
+.log-item:hover {
+  background-color: rgba(112, 42, 204, 0.08);
+  transform: translateX(5px);
+}
+
+.log-item.finance {
+  border-left-color: #22c55e;
+}
+
+.log-item.system {
+  border-left-color: #3b82f6;
+}
+
+.log-item.error {
+  border-left-color: #ef4444;
+}
+
+.log-item.warning {
+  border-left-color: #f59e0b;
+}
+
+.log-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.log-content {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.log-title {
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: var(--text);
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.log-time {
+  font-size: 12px;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.log-category {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.log-category.finance {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+}
+
+.log-category.system {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+}
+
+.log-category.error {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.log-category.warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}
+
+/* Адаптивность для диалогов */
+.dialog-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+.dialog-content {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.dialog-title {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 20px;
+  margin: 0;
+}
+
+.dialog-close {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog-close:hover {
+  color: var(--danger);
+}
+
+.dialog-body {
+  margin-bottom: 20px;
+}
+
+.dialog-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* Адаптивность для всех разрешений */
+@media (max-width: 1024px) {
+  .user-profile {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .balances-property {
+    grid-template-columns: 1fr;
+  }
+  
+  .peer-item {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .peer-actions {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .user-info {
+    grid-template-columns: 1fr;
+  }
+
+  .property-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-row strong {
+    min-width: 160px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .stats-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .peer-meta {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .action-form {
+    grid-template-columns: 1fr;
+  }
+
+  .action-buttons {
+    grid-template-columns: 1fr;
+  }
+  
+  .user-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .dialog-content {
+    padding: 16px;
+    margin: 10px;
+  }
+  
+  .logs-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .logs-filters {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 0 16px;
+  }
+
+  .info-row {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .info-row strong {
+    display: block;
+    min-width: auto;
+    margin-bottom: 4px;
+  }
+
+  .avatar {
+    width: 120px;
+    height: 120px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+  
+  .modal-content {
+    margin: 5% auto;
+    padding: 16px;
+    width: 95%;
+  }
+  
+  .form-input-modal,
+  .form-select-modal {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+  
+  .action-buttons {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .btn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+  
+  .user-card {
+    padding: 12px;
+  }
+  
+  .user-name {
+    font-size: 16px;
+  }
+  
+  .user-status {
+    font-size: 12px;
+    padding: 3px 8px;
+  }
+  
+  .action-form {
+    gap: 8px;
+  }
+  
+  .form-input {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+  
+  .chart-container {
+    height: 300px;
+  }
+  
+  .activity-list {
+    max-height: 300px;
+  }
+  
+  .activity-item {
+    padding: 10px 12px;
+  }
+  
+  .activity-title {
+    font-size: 14px;
+  }
+  
+  .day-tab {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+  .log-item {
+    padding: 12px;
+  }
+  
+  .dialog-footer {
+    flex-direction: column;
+  }
+  
+  .dialog-footer .btn {
+    width: 100%;
+  }
+}
+
+/* Скрытие панели на профиле */
+#profile-section .action-section,
+#profile-section .user-list {
+  display: none !important;
+}
+
+/* Улучшенные стили для логов */
+.logs-timeline {
+  position: relative;
+  padding-left: 30px;
+  width: 100%;
+}
+
+.logs-timeline::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(112, 42, 204, 0.2);
+}
+
+.log-timeline-item {
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.log-timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -23px;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid var(--card-bg);
+}
+
+.log-timeline-item.finance::before {
+  background: #22c55e;
+}
+
+.log-timeline-item.system::before {
+  background: #3b82f6;
+}
+
+.log-timeline-item.error::before {
+  background: #ef4444;
+}
+
+.log-timeline-item.warning::before {
+  background: #f59e0b;
+}
+
+/* Оптимизация для равномерного растягивания */
+.grid-uniform {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.flex-uniform {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+}
+
+.flex-uniform > * {
+  flex: 1 1 250px;
+  min-width: 0;
+}
+
+/* Улучшенное отображение для ПК */
+@media (min-width: 1025px) {
+  .container {
+    max-width: 1400px;
+  }
+  
+  .card {
+    padding: 32px;
+  }
+  
+  .user-profile {
+    grid-template-columns: auto 1fr;
+  }
+  
+  .balances-property {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .property-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+  </style>
+</head>
+<body>
+  <div id="toastContainer"></div>
+<header>
+<div class="profile-dropdown">
+    <div class="profile-icon" aria-label="Меню профиля" id="profileMenu">
+    <img src="profile-icon.jpg" alt="Логотип сайта" style="width: 38px; height: 38px; border-radius: 30%;">
+    </div>
+</header>
+<div class="container">
+  <div class="radio-inputs">
+    <label class="radio">
+      <input type="radio" name="radio" <?php echo $active_section === 'profile' ? 'checked' : ''; ?> data-section="profile">
+      <span class="name">Профиль</span>
+    </label>
+
+    <label class="radio">
+      <input type="radio" name="radio" <?php echo $active_section === 'groups' ? 'checked' : ''; ?> data-section="groups">
+      <span class="name">Беседы</span>
+    </label>
+
+    <label class="radio">
+      <input type="radio" name="radio" <?php echo $active_section === 'panel' ? 'checked' : ''; ?> data-section="panel">
+      <span class="name">Панель</span>
+</label>
+  </div>   
+</div>
+
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-indicator">
+            <div class="spinner"></div>
+            <p>Загрузка ваших данных...</p>
+        </div>
+    </div>
+
+    <section id="profile-section" class="content-section <?php echo $active_section === 'profile' ? 'active' : ''; ?>">
+        <?php if ($from_id && $site): ?>
+            <div class="card" aria-labelledby="user-info-title">
+                <h2 id="user-info-title">
+                    Информация о пользователе
+                </h2>
+                
+                <div class="user-profile">
+                    <div class="avatar-container">
+                        <img src="<?php 
+                            if (intval($site['avatar_url']) == 1) {
+                                $avatar = "profile-icon.jpg"; 
+                            } else {
+                                $avatar = $site['avatar_url'];
+                            } 
+                            echo $avatar; 
+                        ?>" alt="Аватар пользователя" class="avatar">
+                        
+                        <?php
+                        $vip_name = [
+                            1 => "DEF Хозяенёнок",
+                            2 => "VIP Хозяенёнок",
+                            3 => "PREMIUM Хозяенёнок",
+                        ];
+                        $vip = $vip_name[$site['vip'] ?? 0] ?? false;
+                        if ($vip): ?>
+                        <span class="badge vip"><?php echo $vip; ?></span>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <div class="user-info">
+                        <div class="info-row">
+                            <strong>Ник в системе:</strong><br>
+                            <?php echo htmlspecialchars($site['Text'] ?? 'Не указан'); ?>
+                        </div>
+                        
+                        <div class="info-row">
+                            <strong>Права Администратора:</strong><br>
+                            <?php
+                            $admin_names = [
+                                0 => "Пользователь",
+                                1 => "Администратор",
+                                2 => "Супер-Администратор",
+                            ];
+                            $admin_text = $admin_names[$site['is_admin'] ?? 0] ?? "Ошибка";
+                            echo $admin_text;
+                            ?>
+                        </div>
+                        
+                        <div class="info-row">
+                            <strong>Имя пользователя:</strong><br>
+                            @<?php echo htmlspecialchars($site['username'] ?? 'Не указан'); ?>
+                        </div>
+                        
+                        <div class="info-row">
+                            <strong>ID:</strong><br>
+                            <?php echo htmlspecialchars($site['tg_id'] ?? 'Не указан'); ?>
+                        </div>
+                        
+                        <div class="info-row">
+                            <strong>Количество цепей:</strong><br> 
+                            <?php echo htmlspecialchars($site['cep'] ?? '0'); ?>
+                        </div>
+                        
+                        <div class="info-row">
+                            <strong>Ранг в системе:</strong> <br>
+                            <?php
+                            $rank_names = [
+                                3 => "🔧 Хозяетрудник",
+                                4 => "🛡️ Хозяестраж",
+                                5 => "🎓 Хозяемастер",
+                                7 => "👶 Пупсик",
+                                8 => "💰 $ Мажор $",
+                                9 => "👔 Заместитель",
+                                10 => "👑 Гл.ХОЗЯИН",
+                                11 => "👤 Гл.Заместитель",
+                            ];
+                            $rank_name = $rank_names[$site['rang'] ?? 0] ?? "Неизвестный";
+                            echo $rank_name;
+                            ?>
+                            <span class="badge rank">Ранг</span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <strong>День рождения:</strong><br>
+                            <?php
+                            $months = [
+                                1 => 'января', 2 => 'февраля', 3 => 'марта', 4 => 'апреля', 5 => 'мая', 6 => 'июня',
+                                7 => 'июля', 8 => 'августа', 9 => 'сентября', 10 => 'октября', 11 => 'ноября', 12 => 'декабря'
+                            ];
+                            if (!$bday) {
+                                $birth = 'Не установлен';
+                            } else {
+                                if (strpos($bday['birthday'], '.') !== false && strlen($bday['birthday']) == 5) {
+                                    $bday['birthday'] .= '.' . date('Y');
+                                }
+                                $date = strtotime($bday['birthday']);
+                                if ($date === false) {
+                                    echo 'Ошибка преобразования даты!';
+                                } else {
+                                    $day = date('j', $date);
+                                    $monthNumber = (int)date('m', $date);
+                                    $month = $months[$monthNumber];
+                                    $birth = $day . ' ' . $month;
+                                    $birth = mb_convert_case($birth, MB_CASE_TITLE, 'UTF-8');
+                                }
+                            }
+
+                            echo $birth;
+                            ?>
+                        </div>
+                        <div class="info-row">
+                            <strong>Ваш город:</strong><br>
+                            <?php
+                            echo $site['city'] ?? 'Не установлен';
+                            ?>
+                        </div>
+                     <button type="button" class="btn warning" onclick="window.location.href='/map'">
+    Посмотреть карту
+</button>
+                    </div>
+                </div>
+            </div>
+
+            <section class="card" aria-labelledby="balances-title">
+                <h2 id="balances-title">
+                    Ваши балансы
+                </h2>
+                
+                <div class="info-row">
+                    <strong>Hozyaecoin:</strong> 
+                    <?php echo number_format($site['money'] ?? 0, 0, ".", ","); ?> £ hoz
+                </div>
+                <div class="info-row" style="margin-top:12px;">
+                    <strong>👾 BTC:</strong> 
+                    <?php echo number_format($site['btc'] ?? 0, 0, ".", ","); ?> 
+                </div>
+                <div class="info-row" style="margin-top:12px;">
+                    <strong>🎩 ETH:</strong> 
+                    <?php echo number_format($site['eth'] ?? 0, 0, ".", ","); ?> 
+                </div>
+                <div class="info-row" style="margin-top:12px;">
+                    <strong>👾 TON:</strong> 
+                    <?php echo number_format($site['ton'] ?? 0, 0, ".", ","); ?> 
+                </div>
+            </section>
+            <section class="card" aria-labelledby="balances-title">
+                <h2 id="balances-title">
+                    🤵🏻 Х🅾️ЗЯЕВ🅰️ | М🅰️ФИЯ
+                </h2>
+                
+                <div class="info-row" style="margin-top:12px;">
+                    <strong>💎 Камней:</strong> 
+                    <?php echo number_format($site['kamni'] ?? 0, 0, ".", ","); ?> 
+                </div>
+                <div class="info-row" style="margin-top:12px;">
+                    <strong>💵 Деньги:</strong> 
+                    <?php echo number_format($site['moneymaf'] ?? 0, 0, ".", ","); ?> 
+                </div>
+                <div class="info-row" style="margin-top:12px;">
+                    <strong>🛡 Защита:</strong> 
+                    <?php echo number_format($site['maf_protect'] ?? 0, 0, ".", ","); ?> 
+                </div>
+                <div class="info-row" style="margin-top:12px;">
+                    <strong>📑 Документы:</strong> 
+                    <?php echo number_format($site['maf_doc'] ?? 0, 0, ".", ","); ?> 
+                </div>
+                <div class="info-row" style="margin-top:12px;">
+                    <strong>🎎 Активная роль:</strong> 
+                    <?php echo number_format($site['maf_activerole'] ?? 0, 0, ".", ","); ?> 
+                </div>
+            </section>
+
+            <section class="card" aria-labelledby="property-title">
+                <h2 id="property-title">
+                    Взаимодействие и имущество
+                </h2>
+                
+                <div class="balances-property">
+                    <div class="property-grid">
+                        <div class="info-row"><strong>Автомобиль:</strong><br> <?php echo !empty($site['cars']) ? htmlspecialchars($site['cars']) : 'Нету'; ?></div>
+                        <div class="info-row"><strong>Недвижимость:</strong><br> <?php echo !empty($site['houses']) ? htmlspecialchars($site['houses']) : 'Нету'; ?></div>
+                        <div class="info-row"><strong>Яхта:</strong><br> <?php echo !empty($site['yachts']) ? htmlspecialchars($site['yachts']) : 'Нету'; ?></div>
+                        <div class="info-row"><strong>Самолет:</strong><br> <?php echo !empty($site['planes']) ? htmlspecialchars($site['planes']) : 'Нету'; ?></div>
+                        <div class="info-row"><strong>Вертолет:</strong><br> <?php echo !empty($site['helicopters']) ? htmlspecialchars($site['helicopters']) : 'Нету'; ?></div>
+                        <div class="info-row"><strong>Телефон:</strong><br> <?php echo !empty($site['phones']) ? htmlspecialchars($site['phones']) : 'Нету'; ?></div>
+                        <div class="info-row"><strong>Компьютер:</strong><br> <?php echo !empty($site['pcs']) ? htmlspecialchars($site['pcs']) : 'Нету'; ?></div>
+                    </div>
+
+                    <hr>
+
+                    <div class="property-grid">
+                        <h3>💼 Бизнесы</h3>
+                        <?php
+                        $businesses = [
+                            "bukmek"=>["name"=>"Букмекерская контора"],
+                            "magazin"=>["name"=>"Магазин"],
+                            "kafe"=>["name"=>"Кафе"],
+                            "restoran"=>["name"=>"Ресторан"],
+                            "bar"=>["name"=>"Бар"],
+                            "nightclub"=>["name"=>"Ночной клуб"],
+                            "autoshop"=>["name"=>"Автомагазин"],
+                            "cinema"=>["name"=>"Кинотеатр"],
+                            "hotel"=>["name"=>"Отель"],
+                            "casino"=>["name"=>"Казино"]
+                        ];
+
+                        $hasBiz = false;
+                        foreach ($businesses as $key=>$biz) {
+                            if (!empty($site["biz_{$key}"])) {
+                                $hasBiz = true;
+                                $level = !empty($site["biz_{$key}_level"]) ? $site["biz_{$key}_level"] : 1;
+                                echo "<div class='info-row'><strong>{$biz['name']}:</strong> Уровень {$level}</div>";
+                            }
+                        }
+                        if (!$hasBiz) {
+                            echo "<div class='info-row'>❌ У вас нет бизнесов</div>";
+                        }
+                        ?>
+                    </div>
+
+                    <hr>
+
+                    <div class="property-grid">
+                        <h3>🎁 Аксессуары</h3>
+                        <?php
+                        $accessories = [
+                            "nimb"=>"Нимб",
+                            "shar"=>"Шар",
+                            "bronzovy_medal"=>"Бронзовая медаль",
+                            "serebryany_medal"=>"Серебряная медаль",
+                            "zolotoy_medal"=>"Золотая медаль",
+                            "angel_wings"=>"Крылья ангела",
+                            "devil_horn"=>"Рога дьявола",
+                            "diamond_ring"=>"Бриллиантовое кольцо",
+                            "magic_orb"=>"Волшебный шар",
+                            "crown"=>"Корона"
+                        ];
+
+                        $hasAcc = false;
+                        foreach ($accessories as $key=>$name) {
+                            if (!empty($site["acc_{$key}"])) {
+                                $hasAcc = true;
+                                echo "<div class='info-row'>✅ {$name}</div>";
+                            }
+                        }
+                        if (!$hasAcc) {
+                            echo "<div class='info-row'>❌ У вас нет аксессуаров</div>";
+                        }
+                        ?>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="card">
+                <h2 id="stats-title">
+                    Статистика сообщений за последние 7 дней
+                </h2>
+                
+                <?php
+                $total_messages = array_sum($message_counts);
+                $average_per_day = $total_messages > 0 ? round($total_messages / 7) : 0;
+                $max_per_day = max($message_counts);
+                ?>
+                
+                <div class="stats-summary">
+                    <div class="stat-item">
+                        <div class="stat-number">Всего сообщений: <?php echo $total_messages; ?></div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">В среднем в день: <?php echo $average_per_day; ?></div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">Максимум в день: <?php echo $max_per_day; ?></div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="messageChart"></canvas>
+                </div>
+            </section>
+
+<?php    
+function formatTimeAgo($datetime) {
+    $now = new DateTime();
+    $date = new DateTime($datetime);
+    $diff = $now->diff($date);
+    
+    if ($diff->days > 7) {
+        return date('d.m.Y', strtotime($datetime));
+    } elseif ($diff->days > 0) {
+        return $diff->days . ' ' . getRussianWord($diff->days, ['день', 'дня', 'дней']) . ' назад';
+    } elseif ($diff->h > 0) {
+        return $diff->h . ' ' . getRussianWord($diff->h, ['час', 'часа', 'часов']) . ' назад';
+    } elseif ($diff->i > 0) {
+        return $diff->i . ' ' . getRussianWord($diff->i, ['минуту', 'минуты', 'минут']) . ' назад';
+    } else {
+        return 'только что';
+    }
+}
+
+function getRussianWord($number, $words) {
+    $cases = array(2, 0, 1, 1, 1, 2);
+    return $words[($number % 100 > 4 && $number % 100 < 20) ? 2 : $cases[min($number % 10, 5)]]; 
+}
+
+function getLogCategory($logText) {
+    $text = strtolower($logText);
+    
+    $financeKeywords = ['раб', 'деньги', 'выиграл', 'проиграл', 'ставка', 'платеж', 'платежи', 'кошелек', 'пополнение', 'вывод', 'поставил', 'бонус', 'баланс', 'бизнес', 'аксессуар'];
+    $systemKeywords = ['система', 'админ', 'рассылка', 'подписка', 'заблокировал', 'отклонил', 'одобрил', 'запрос', 'семей', 'команду', '/st', 'рассылк'];
+
+    foreach ($financeKeywords as $keyword) {
+        if (strpos($text, $keyword) !== false) {
+            return 'finance';
+        }
+    }
+
+    foreach ($systemKeywords as $keyword) {
+        if (strpos($text, $keyword) !== false) {
+            return 'system';
+        }
+    }
+
+    return 'system';
+}
+
+function getLogIcon($text) {
+    $text = strtolower($text);
+    
+    if (strpos($text, 'в казино и проиграл') !== false || 
+        strpos($text, 'заблокировал') !== false ||
+        strpos($text, 'отклонил запрос') !== false ||
+        strpos($text, 'отписался от рассылки') !== false) {
+        return ['cross', 'activity-icon-red'];
+    } elseif (strpos($text, 'и выиграл с множителем') !== false || 
+             strpos($text, 'раб') !== false ||
+             strpos($text, 'одобрил запрос') !== false ||
+             strpos($text, 'выдал семей') !== false ||
+             strpos($text, 'подписался на рассылку') !== false ||
+             strpos($text, '/st') !== false) {
+        return ['check', 'activity-icon-green'];
+    } elseif (strpos($text, 'админ отправил рассылку') !== false) {
+        return ['message', 'activity-icon-blue'];
+    }
+    
+    return ['message', 'activity-icon-blue'];
+}
+?>
+
+<!-- Улучшенный дизайн логов -->
+<div class="logs-container">
+    <div class="logs-header">
+        <h2>История действий</h2>
+        <div class="logs-filters">
+            <button class="filter-btn active" data-filter="all">Все</button>
+            <button class="filter-btn" data-filter="finance">Финансы</button>
+            <button class="filter-btn" data-filter="system">Система</button>
+        </div>
+    </div>
+
+    <div class="days-navigation">
+        <div class="days-tabs">
+            <?php 
+            $first = true;
+            foreach ($groupedLogs as $day => $dayLogs): 
+                $today = date('Y-m-d');
+                $yesterday = date('Y-m-d', strtotime('-1 day'));
+                
+                if ($day === $today) {
+                    $displayName = 'Сегодня';
+                } elseif ($day === $yesterday) {
+                    $displayName = 'Вчера';
+                } else {
+                    $displayName = date('d.m', strtotime($day));
+                }
+                
+                $financeCount = 0;
+                $systemCount = 0;
+                foreach ($dayLogs as $log) {
+                    $category = getLogCategory($log['log_text']);
+                    if ($category === 'finance') $financeCount++;
+                    if ($category === 'system') $systemCount++;
+                }
+            ?>
+                <button class="day-tab <?php echo $first ? 'active' : ''; ?>" data-day="<?php echo $day; ?>">
+                    <span class="day-name"><?php echo $displayName; ?></span>
+                    <span class="day-stats">
+                        <span class="finance-count"><?php echo $financeCount; ?></span>/
+                        <span class="system-count"><?php echo $systemCount; ?></span>
+                    </span>
+                </button>
+            <?php 
+                $first = false;
+            endforeach; 
+            ?>
+        </div>
+    </div><br>
+    <hr><br>
+    
+    <div class="logs-timeline">
+        <?php foreach ($groupedLogs as $day => $dayLogs): ?>
+            <div class="day-activities" data-day="<?php echo $day; ?>" style="<?php echo ($day === date('Y-m-d')) ? '' : 'display:none;'; ?>">
+                <div class="day-header">
+                    <h3>
+                        <?php 
+                        $today = date('Y-m-d');
+                        $yesterday = date('Y-m-d', strtotime('-1 day'));
+                        
+                        if ($day === $today) {
+                            echo 'Сегодня';
+                        } elseif ($day === $yesterday) {
+                            echo 'Вчера';
+                        } else {
+                            echo date('d.m.Y', strtotime($day));
+                        }
+                        ?>
+                    </h3>
+                    <span class="day-total"><?php echo count($dayLogs); ?> событий</span>
+                </div>
+                
+                <div class="logs-list">
+                    <?php foreach ($dayLogs as $log): 
+                        $category = getLogCategory($log['log_text']);
+                        list($icon, $color_class) = getLogIcon($log['log_text']);
+                    ?>
+                        <div class="log-item log-timeline-item <?php echo $category; ?>" data-category="<?php echo $category; ?>">
+                            <?php if ($icon === 'shield'): ?>
+                                <svg class="log-icon <?php echo $color_class; ?>" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                                </svg>
+                            <?php elseif ($icon === 'cross'): ?>
+                                <svg class="log-icon <?php echo $color_class; ?>" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                </svg>
+                            <?php elseif ($icon === 'check'): ?>
+                                <svg class="log-icon <?php echo $color_class; ?>" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
+                            <?php else: ?>
+                                <svg class="log-icon <?php echo $color_class; ?>" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+                                </svg>
+                            <?php endif; ?>
+                            
+                            <div class="log-content">
+                                <div class="log-title">
+                                    <?php echo $log['log_text']; ?>
+                                    <span class="log-category <?php echo $category; ?>">
+                                        <?php echo $category === 'finance' ? 'Финансы' : 'Система'; ?>
+                                    </span>
+                                </div>
+                                <div class="log-time">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                    </svg>
+                                    <?php echo formatTimeAgo($log['created_at']); ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+</div>
+            </section>
+        <?php else: ?>
+            <div class="card">
+                <h2>Ожидание данных пользователя...</h2>
+                <p>Пожалуйста, подождите, пока загружаются ваши данные.</p>
+            </div>
+        <?php endif; ?>
+    </section>
+    <section id="groups-section" class="content-section <?php echo $active_section === 'groups' ? 'active' : ''; ?>">
+        <?php if ($from_id && $site): ?>
+            <section class="card">
+                <h2>Мои беседы</h2>
+                <div class="peers-list">
+                    <?php
+                    $stmt = $con->prepare("SELECT peer FROM tg_nlist WHERE tg_id = ?");
+                    $stmt->execute([$from_id]);
+                    $sites = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    
+                    if (count($sites) > 0) {
+                        foreach ($sites as $site): 
+                            if($site['peer'] == '-1002483132170') {
+                                $name = "Х🅾️ЗЯЕВ🅰️ | BO"; 
+                                $owner_name = "s69x😈";
+                                $owner_link = "samp69x";
+                            } else {
+                                $name = "#ВО || ХОЗЯЕВА || Массоны";
+                                $owner_name = "”david” 🥶 ";
+                                $owner_link = "david_dream";
+                            }
+                            
+                            $stmt = $con->prepare("SELECT date FROM all_message WHERE peer = ? ORDER BY date DESC LIMIT 1");
+                            $stmt->execute([$site['peer']]);
+                            $lastMessage = $stmt->fetch(PDO::FETCH_ASSOC);
+                            
+                            $sitepeer = $site['peer'];
+                            $response = file_get_contents(
+                                "https://api.telegram.org/bot7829579595:AAFYq5Qmo6dA6DA5jn9g2hKn-Uedt6jnB7A/getChatMemberCount?chat_id=$sitepeer"
+                            );
+                            $data = json_decode($response, true);
+                    ?>
+                    <div class="peer-item">
+                        <img src="/profile-icon.jpg" alt="Аватар беседы" class="peer-avatar">
+                        <div class="peer-details">
+                            <h3 class="peer-title"><?php echo $name; ?></h3>
+                            <div class="peer-meta">
+                                <span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+                                    </svg>
+                                    Последняя активность: <?php echo $lastMessage['date']; ?>
+                                </span>
+                                <span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                    </svg>
+                                    Владелец: <a href="https://t.me/<?php echo $owner_link; ?>"><?php echo $owner_name; ?></a>
+                                </span>
+                                <span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                                    </svg>
+                                    Участников: <?php echo $data["result"]; ?>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="peer-actions">
+                            <a href="mini-app-infopeer?id=<?php echo urlencode($site['peer']); ?>" class="peer-button">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                                </svg>
+                                Подробнее
+                            </a>
+                        </div>
+                    </div>
+                    <?php endforeach; 
+                    } else { ?>
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+                        </svg>
+                        <p>У вас пока что нету бесед, но никогда не поздно добавится :)</p>
+                    </div>
+                    <?php } ?>
+                </div>
+            </section>
+        <?php else: ?>
+            <div class="card">
+                <h2>Ожидание данных пользователя...</h2>
+                <p>Пожалуйста, подождите, пока загружаются ваши данные.</p>
+            </div>
+        <?php endif; ?>
+    </section>
+
+<section id="panel-section" class="content-section <?php echo $active_section === 'panel' ? 'active' : ''; ?>">
+    <section class="card">
+        <h2>
+            Заместители Онлайн
+            <span id="refreshTimer" style="font-size: 14px; color: var(--text-light); margin-left: auto;">
+                Обновление через: 3 сек
+            </span>
+        </h2>
+        
+        <div class="user-list" id="onlineUsersList">
+            <?php
+            $deputies_file = __DIR__ . "/json/zams_inonline.json";
+            $online_list = [];
+            $offline_list = [];
+            
+            if (file_exists($deputies_file)) {
+                $data = json_decode(file_get_contents($deputies_file), true);
+                
+                if (is_array($data)) {
+                    $now = time();
+                    
+                    $weekly_stats = [];
+                    try {
+                        $stmt = $con->prepare("SELECT nick, minut FROM online_zames WHERE 1");
+                        $stmt->execute();
+                        $stats_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        
+                        foreach ($stats_data as $stat) {
+                            $weekly_stats[$stat['nick']] = $stat['minut'];
+                        }
+                    } catch (Exception $e) {
+                        error_log("Error fetching weekly stats: " . $e->getMessage());
+                    }
+                    
+                    foreach ($data as $nick => $last_seen) {
+                        $last_seen_diff = $now - $last_seen;
+                        $weekly_online = isset($weekly_stats[$nick]) ? $weekly_stats[$nick] : 0;
+                        
+                        if ($last_seen_diff <= 70) {
+                            $online_list[$nick] = [
+                                'status' => "в сети",
+                                'weekly' => $weekly_online
+                            ];
+                        } else {
+                            $last_seen_str = formatDuration($last_seen_diff);
+                            $offline_list[$nick] = [
+                                'status' => "был $last_seen_str назад",
+                                'weekly' => $weekly_online
+                            ];
+                        }
+                    }
+                }
+            }
+            
+            function formatDuration($seconds) {
+                $units = [
+                    'день' => 86400,
+                    'час' => 3600,
+                    'мин' => 60,
+                    'сек' => 1
+                ];
+                
+                $result = [];
+                foreach ($units as $name => $divisor) {
+                    if ($quot = intval($seconds / $divisor)) {
+                        $result[] = $quot . ' ' . $name;
+                        $seconds %= $divisor;
+                    }
+                }
+                
+                return implode(' ', $result);
+            }
+            
+            function formatWeeklyTime($minutes) {
+                if ($minutes < 60) {
+                    return $minutes . ' мин';
+                } else {
+                    $hours = floor($minutes / 60);
+                    $remaining_minutes = $minutes % 60;
+                    if ($remaining_minutes > 0) {
+                        return $hours . ' ч ' . $remaining_minutes . ' мин';
+                    } else {
+                        return $hours . ' ч';
+                    }
+                }
+            }
+            
+            if (!empty($online_list)) {
+                foreach($online_list as $nick => $data): ?>
+                <div class="user-card">
+                    <div class="user-header">
+                        <div class="user-name"><?php echo htmlspecialchars($nick); ?></div>
+                        <div class="user-status status-online">
+                            <?php echo $data['status']; ?>
+                        </div>
+                    </div>
+                    <div class="user-stats">
+                        <span class="weekly-stats">Онлайн за неделю: <?php echo formatWeeklyTime($data['weekly']); ?></span>
+                    </div>
+                </div>
+                <?php endforeach;
+            }
+            
+            if (!empty($offline_list)) {
+                foreach($offline_list as $nick => $data): ?>
+                <div class="user-card">
+                    <div class="user-header">
+                        <div class="user-name"><?php echo htmlspecialchars($nick); ?></div>
+                        <div class="user-status status-offline">
+                            <?php echo $data['status']; ?>
+                        </div>
+                    </div>
+                    <div class="user-stats">
+                        <span class="weekly-stats">Онлайн за неделю: <?php echo formatWeeklyTime($data['weekly']); ?></span>
+                    </div>
+                </div>
+                <?php endforeach;
+            }
+            ?>
+        </div>
+    </section>
+
+<?php
+$stmt = $con->prepare("SELECT * FROM tg_nlist WHERE tg_id = ?");
+$stmt->execute([$from_id]);
+$sitecheck = $stmt->fetch(PDO::FETCH_ASSOC);
+if ($from_id && $sitecheck && $sitecheck['is_admin'] >= 1): ?>
+<section class="card">
+    <h2>Действия с пользователями</h2>
+    
+    <div class="action-section">
+        <form class="action-form" id="userActionForm">
+            <div class="form-group">
+                <label class="form-label">Введите ник пользователя:</label>
+                <input type="text" name="target_nick" class="form-input" placeholder="Ник пользователя">
+            </div>
+            <div class="action-buttons">
+                <button type="button" class="btn purple" onclick="openModal('rankModal')">
+                    Сменить ранг
+                </button>
+                <button type="button" class="btn warning" onclick="openModal('warningModal')">
+                    Выдать выговор
+                </button>
+                <button type="button" class="btn warning" onclick="openModal('muteModal')">
+                    Выдать бан чата
+                </button>
+                <button type="button" class="btn danger" onclick="openModal('banModal')">
+                    Заблокировать
+                </button>
+                <button type="button" class="btn danger" onclick="openModal('kickModal')">
+                    Исключить из семьи
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+<?php if ($sitecheck['is_admin'] >= 1): ?>
+<?php
+$modals = [
+    '404'=>['title'=>'404','fields'=>[
+    ]],
+    'warningModal'=>['title'=>'Выдать предупреждение','fields'=>[
+        ['label'=>'Ник','name'=>'target_nick','type'=>'text','required'=>true],
+        ['label'=>'Причина','name'=>'warning_reason','type'=>'text','required'=>true]
+    ]],
+    'muteModal'=>['title'=>'Выдать семейный мут','fields'=>[
+        ['label'=>'Ник','name'=>'target_nick','type'=>'text','required'=>true],
+        ['label'=>'Минуты','name'=>'mute_minutes','type'=>'number','required'=>true,'min'=>2,'max'=>180]
+    ]],
+    'banModal'=>['title'=>'Выдать блокировку','fields'=>[
+        ['label'=>'Ник','name'=>'target_nick','type'=>'text','required'=>true],
+        ['label'=>'Причина','name'=>'ban_reason','type'=>'text','required'=>true]
+    ]],
+    'kickModal'=>['title'=>'Кикнуть пользователя','fields'=>[
+        ['label'=>'Ник','name'=>'target_nick','type'=>'text','required'=>true]
+    ]],
+    'rankModal'=>['title'=>'Сменить ранг','fields'=>[
+        ['label'=>'Ник','name'=>'target_nick','type'=>'text','required'=>true],
+        ['label'=>'Новый ранг','name'=>'rank','type'=>'select','options'=>[
+            '' => '-- Выберите ранг --', 
+            3 => '🔧 Хозяетрудник',
+            4 => '🛡️ Хозяестраж',
+            5 => '🎓 Хозяемастер',
+            7 => '👶 Пупсик', 
+            8 => '💰 $ Мажор $',
+            9 => '👔 Заместитель',
+            10 => '👑 Гл.ХОЗЯUH',
+            11 => '👤 Гл.Заместитель'
+        ], 'required' => true, 'default' => 3]
+    ]],
+];
+?>
+
+<?php foreach($modals as $id=>$modal): ?>
+<div id="<?php echo $id;?>" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title"><?php echo $modal['title'];?></h3>
+            <span class="close" onclick="closeModal('<?php echo $id;?>')">&times;</span>
+        </div>
+        
+        <form class="ajax-form" data-action="<?php echo str_replace('Modal', '', $id); ?>">
+            <input type="hidden" name="ajax_action" value="1">
+            <input type="hidden" name="action" value="<?php echo str_replace('Modal', '', $id); ?>">
+            
+            <?php foreach($modal['fields'] as $field): ?>
+            <div class="form-group-modal">
+                <label class="form-label-modal"><?php echo $field['label'];?></label>
+                <?php if($field['type']==='select'): ?>
+                <select name="<?php echo $field['name'];?>" class="form-select-modal" 
+                        <?php echo ($field['required']??false)?'required':'';?>>
+                    <?php foreach($field['options'] as $val=>$label): ?>
+                    <option value="<?php echo $val;?>" 
+                            <?php echo (isset($field['default']) && $field['default'] == $val)?'selected':'';?>>
+                        <?php echo $label;?>
+                    </option>
+                    <?php endforeach;?>
+                </select>
+                <?php else: ?>
+                <input type="<?php echo $field['type'];?>" name="<?php echo $field['name'];?>" class="form-input-modal"
+                    <?php echo ($field['required']??false)?'required':'';?>
+                    <?php echo isset($field['min'])?' min="'.$field['min'].'"':'';?>
+                    <?php echo isset($field['max'])?' max="'.$field['max'].'"':'';?>
+                    <?php echo $field['type'] === 'text' ? 'placeholder="Введите '.$field['label'].'"' : '';?>>
+                <?php endif;?>
+            </div>
+            <?php endforeach;?>
+            
+            <div class="form-actions">
+                <button type="button" class="btn danger" onclick="closeModal('<?php echo $id;?>')">Отмена</button>
+                <button type="submit" class="btn">Подтвердить</button>
+            </div>
+        </form>
+    </div>
+</div>
+<?php endforeach; ?>
+<?php endif; ?>
+
+<?php else: ?>
+<?php endif; ?>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tg = window.Telegram.WebApp;
+    const fromIdExists = <?php echo $from_id ? 'true' : 'false'; ?>;
+    
+    const loadingOverlay = document.getElementById('loading-overlay');
+    loadingOverlay.style.display = 'flex';
+    
+    setTimeout(() => {
+        loadingOverlay.classList.add('hiding');
+        setTimeout(() => {
+            loadingOverlay.style.display = 'none';
+            loadingOverlay.classList.remove('hiding');
+        }, 300);
+    }, 1000);
+    
+    document.querySelectorAll('.radio-inputs input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.checked) {
+                const section = this.getAttribute('data-section');
+                
+                loadingOverlay.style.display = 'flex';
+                
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                setTimeout(() => {
+                    document.getElementById(section + '-section').classList.add('active');
+                    
+                    loadingOverlay.classList.add('hiding');
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                        loadingOverlay.classList.remove('hiding');
+                    }, 300);
+                    
+                    const url = new URL(window.location);
+                    url.searchParams.set('section', section);
+                    window.history.replaceState({}, '', url);
+                }, 500);
+            }
+        });
+    });
+    
+    if (!fromIdExists) {
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            const user = tg.initDataUnsafe.user;
+            console.log('Telegram user found:', user.id);
+            
+            fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ from_id: user.id })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Data sent successfully:', data);
+                if (data.success) {
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error sending data:', error);
+                document.querySelector('main.content').innerHTML = `
+                    <div class="card">
+                        <h2>Ошибка загрузки</h2>
+                        <p>Не удалось загрузить данные пользователя. Пожалуйста, обновите страницу.</p>
+                        <button onclick="window.location.reload()" class="btn">Обновить страницу</button>
+                    </div>
+                `;
+            });
+        } else {
+            console.log('Telegram WebApp not initialized');
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+        }
+    }
+    
+    <?php if (isset($dates) && isset($message_counts)): ?>
+    const ctx = document.getElementById('messageChart');
+    if (ctx) {
+        const messageChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: <?php echo json_encode($dates); ?>,
+                datasets: [{
+                    label: 'Сообщений',
+                    data: <?php echo json_encode($message_counts); ?>,
+                    backgroundColor: 'rgba(112, 42, 204, 0.6)',
+                    borderColor: 'rgba(112, 42, 204, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+    
+    // Фильтрация логов
+    document.querySelectorAll('.logs-filters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const filter = this.getAttribute('data-filter');
+            
+            document.querySelectorAll('.logs-filters .filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            document.querySelectorAll('.log-item').forEach(item => {
+                if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+    
+    // Переключение дней в логах
+    document.querySelectorAll('.day-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const day = this.getAttribute('data-day');
+            
+            document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            document.querySelectorAll('.day-activities').forEach(dayEl => {
+                dayEl.style.display = dayEl.getAttribute('data-day') === day ? 'block' : 'none';
+            });
+        });
+    });
+    <?php endif; ?>
+});
+
+let refreshTimer = 5;
+let timerInterval;
+
+function openModal(id) {
+    const mainFormNick = document.querySelector('input[name="target_nick"]').value;
+    const modalInput = document.querySelector('#' + id + ' input[name="target_nick"]');
+    
+    if (modalInput && mainFormNick) {
+        modalInput.value = mainFormNick;
+    }
+    
+    document.getElementById(id).style.display = 'block';
+}
+
+function closeModal(id) { 
+    document.getElementById(id).style.display = 'none'; 
+}
+
+function showToast(message, type = 'success') {
+    const toastContainer = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    const icons = {
+        success: '✅',
+        error: '❌',
+        warning: '⚠️'
+    };
+    
+    toast.innerHTML = `
+<div class="card1 ${type}">
+  <svg class="wave" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M0,256L11.4,240C22.9,224,46,192,69,192C91.4,192,114,224,137,234.7C160,245,183,235,206,213.3C228.6,192,251,160,274,149.3C297.1,139,320,149,343,181.3C365.7,213,389,267,411,282.7C434.3,299,457,277,480,250.7C502.9,224,526,192,549,181.3C571.4,171,594,181,617,208C640,235,663,277,686,256C708.6,235,731,149,754,122.7C777.1,96,800,128,823,165.3C845.7,203,869,245,891,224C914.3,203,937,117,960,112C982.9,107,1006,181,1029,197.3C1051.4,213,1074,171,1097,144C1120,117,1143,107,1166,133.3C1188.6,160,1211,224,1234,218.7C1257.1,213,1280,139,1303,133.3C1325.7,128,1349,192,1371,192C1394.3,192,1417,128,1429,96L1440,64L1440,320L0,320Z"
+      fill-opacity="1"
+    ></path>
+  </svg>
+
+  <div class="icon-container">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+      class="icon success-icon"
+      style="display: ${type === 'success' ? 'block' : 'none'}"
+    >
+      <path
+        d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L369 209z"
+      ></path>
+    </svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 15 15"
+      class="icon error-icon"
+      style="display: ${type === 'error' ? 'block' : 'none'}"
+    >
+      <path
+        fill="currentColor"
+        d="M11.78 4.03c.22-.22.22-.59 0-.81a.574.574 0 0 0-.81 0L7.5 6.69 4.03 3.22a.574.574 0 0 0-.81 0c-.22.22-.22.59 0 .81L6.69 7.5l-3.47 3.47a.574.574 0 0 0 0 .81c.22.22.59.22.81 0L7.5 8.31l3.47 3.47c.22.22.59.22.81 0 .22-.22.22-.59 0-.81L8.31 7.5l3.47-3.47z"
+      />
+    </svg>
+  </div>
+
+  <div class="message-text-container">
+    <p class="message-text">${type === 'success' ? 'Успешно!' : 'Ошибка!'}</p>
+    <p class="sub-text">${message}</p>
+  </div>
+</div>
+
+    `;
+    
+    toastContainer.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        toast.classList.add('hide');
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.remove();
+            }
+        }, 300);
+    }, 5000);
+}
+
+function updateOnlineStatus() {
+    fetch(window.location.href, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.text())
+    .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const newUserList = doc.getElementById('onlineUsersList');
+        
+        if (newUserList) {
+            document.getElementById('onlineUsersList').innerHTML = newUserList.innerHTML;
+        }
+        
+        refreshTimer = 5;
+        updateTimerDisplay();
+    })
+    .catch(error => {
+        console.error('Ошибка при обновлении статуса:', error);
+        showToast('Ошибка при обновлении статуса', 'error');
+    });
+}
+
+function updateTimerDisplay() {
+    const timerElement = document.getElementById('refreshTimer');
+    if (timerElement) {
+        timerElement.textContent = `Обновление через: ${refreshTimer} сек`;
+    }
+}
+
+async function handleFormSubmit(form, action) {
+    console.log('Обработка формы:', action);
+    
+    const requiredInputs = form.querySelectorAll('[required]');
+    let isValid = true;
+    
+    requiredInputs.forEach(input => {
+        console.log('Проверка поля:', input.name, 'значение:', input.value);
+        if (!input.value.trim()) {
+            isValid = false;
+            input.style.borderColor = 'red';
+            console.log('Поле не заполнено:', input.name);
+        } else {
+            input.style.borderColor = '';
+        }
+    });
+    
+    if (!isValid) {
+        showToast('Заполните все обязательные поля', 'error');
+        return;
+    }
+    
+    const formData = new FormData(form);
+    formData.append('ajax', 1);
+    
+    for (let [key, value] of formData.entries()) {
+        console.log(key + ': ' + value);
+    }
+    
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalText = submitButton.innerHTML;
+    submitButton.innerHTML = 'Загрузка...'; 
+    submitButton.disabled = true;
+
+    try {
+        console.log('Отправка запроса...');
+        const response = await fetch('', {
+            method: 'POST', 
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+        
+        console.log('Ответ получен, статус:', response.status);
+        const result = await response.json();
+        console.log('Результат:', result);
+        
+        if(result.success){
+            showToast(result.message,'success');
+            closeModal(action+'Modal');
+        }else{
+            showToast(result.message,'error');
+        }
+    } catch(e){
+        console.error('Ошибка сети:', e);
+        showToast('Ошибка сети','error');
+    } finally{
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.ajax-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const action = this.getAttribute('data-action');
+            handleFormSubmit(this, action);
+        });
+    });
+    
+    updateTimerDisplay();
+    timerInterval = setInterval(function() {
+        refreshTimer--;
+        updateTimerDisplay();
+        
+        if (refreshTimer <= 0) {
+            updateOnlineStatus();
+        }
+    }, 1000);
+    
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal(this.id);
+            }
+        });
+    });
+});
+
+window.addEventListener('beforeunload', function() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+});
+</script>
+
+</body>
+</html>
