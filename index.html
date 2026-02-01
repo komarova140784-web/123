@@ -1,2300 +1,1525 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <title>ХОЗЯЕВА EMPIRE</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
-
-/* ==================== */
-/* DARK THEME ENHANCEMENTS */
-/* ==================== */
-
-:root {
-  /* Темная цветовая палитра */
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #141420;
-  --bg-tertiary: #1e1e2f;
-  --bg-card: rgba(25, 25, 40, 0.8);
-  --bg-glass: rgba(30, 30, 50, 0.7);
-  
-  /* Градиенты для темной темы */
-  --gradient-primary: linear-gradient(135deg, #8b5cf6, #6366f1);
-  --gradient-secondary: linear-gradient(135deg, #ec4899, #8b5cf6);
-  --gradient-dark: linear-gradient(135deg, #1e1b4b, #312e81);
-  --gradient-glow: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(99, 102, 241, 0.3));
-  
-  /* Неоновые акценты */
-  --neon-purple: #8b5cf6;
-  --neon-pink: #ec4899;
-  --neon-blue: #6366f1;
-  --neon-cyan: #06b6d4;
-  
-  /* Улучшенные тени с неоновым свечением */
-  --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.3);
-  --shadow-glow-lg: 0 0 40px rgba(139, 92, 246, 0.4);
-  --shadow-glow-xl: 0 0 60px rgba(139, 92, 246, 0.5);
-  
-  /* Прозрачность */
-  --glass-border: rgba(139, 92, 246, 0.2);
-  --glass-highlight: rgba(255, 255, 255, 0.05);
-}
-
-/* Темный фон */
-body {
-  background: var(--bg-primary);
-  color: #e2e8f0;
-  background-image: 
-    radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
-    radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
-  min-height: 100vh;
-}
-
-/* ==================== */
-/* GLASS MORPHISM CARDS */
-/* ==================== */
-
-.card {
-  background: var(--bg-glass);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
-  padding: 32px;
-  margin-bottom: var(--section-spacing);
-  position: relative;
-  overflow: hidden;
-  transition: var(--transition-normal);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    var(--shadow-glow);
-}
-
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, 
-    transparent, 
-    var(--neon-purple), 
-    var(--neon-pink),
-    transparent);
-  animation: borderFlow 3s linear infinite;
-}
-
-.card:hover {
-  transform: translateY(-8px);
-  box-shadow: 
-    0 16px 48px rgba(0, 0, 0, 0.4),
-    var(--shadow-glow-lg);
-  border-color: rgba(139, 92, 246, 0.4);
-}
-
-/* Анимация границы */
-@keyframes borderFlow {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-/* ==================== */
-/* NEON HEADERS */
-/* ==================== */
-
-.card h2 {
-  position: relative;
-  padding-bottom: 16px;
-  margin-bottom: 32px;
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  color: transparent;
-  background: linear-gradient(135deg, #ffffff, #a5b4fc);
-  -webkit-background-clip: text;
-  background-clip: text;
-  text-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
-}
-
-.card h2::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 80px;
-  height: 4px;
-  background: var(--gradient-primary);
-  border-radius: 4px;
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
-
-/* ==================== */
-/* GLOWING INFO ROWS */
-/* ==================== */
-
-.info-row {
-  position: relative;
-  padding: 20px 24px;
-  background: rgba(30, 30, 50, 0.5);
-  border-radius: 16px;
-  border-left: 4px solid transparent;
-  transition: var(--transition-normal);
-  margin-bottom: 16px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.info-row:hover {
-  background: rgba(40, 40, 60, 0.6);
-  border-left-color: var(--neon-purple);
-  transform: translateX(8px);
-  box-shadow: 
-    inset 4px 0 0 var(--neon-purple),
-    0 0 20px rgba(139, 92, 246, 0.2);
-}
-
-.info-row strong {
-  color: #c7d2fe;
-  font-weight: 600;
-  display: inline-block;
-  min-width: 240px;
-  position: relative;
-  padding-left: 32px;
-}
-
-.info-row strong::before {
-  content: '✨';
-  position: absolute;
-  left: 0;
-  font-size: 18px;
-  animation: sparkle 2s ease-in-out infinite;
-}
-
-@keyframes sparkle {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.1); }
-}
-
-/* ==================== */
-/* NEON AVATAR */
-/* ==================== */
-
-.avatar {
-  width: 160px;
-  height: 160px;
-  border-radius: 30%;
-  position: relative;
-  border: none;
-  padding: 4px;
-  background: var(--gradient-primary);
-  transition: var(--transition-normal);
-  box-shadow: 
-    0 0 40px rgba(139, 92, 246, 0.4),
-    inset 0 0 20px rgba(255, 255, 255, 0.1);
-}
-
-.avatar::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: 32%;
-  background: var(--gradient-secondary);
-  z-index: -1;
-  animation: rotate 4s linear infinite;
-  opacity: 0;
-  transition: var(--transition-normal);
-}
-
-.avatar:hover::before {
-  opacity: 1;
-}
-
-.avatar:hover {
-  transform: scale(1.1) rotate(5deg);
-  box-shadow: 
-    0 0 60px rgba(139, 92, 246, 0.6),
-    inset 0 0 30px rgba(255, 255, 255, 0.2);
-}
-
-@keyframes rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.avatar img {
-  width: 100%;
-  height: 100%;
-  border-radius: 28%;
-  object-fit: cover;
-  position: relative;
-  z-index: 1;
-}
-
-/* ==================== */
-/* GLOWING BADGES */
-/* ==================== */
-
-.badge {
-  padding: 8px 18px;
-  border-radius: 24px;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
-  border: 1px solid transparent;
-  animation: badgeGlow 3s ease-in-out infinite;
-}
-
-.badge::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(45deg, 
-    transparent 30%, 
-    rgba(255, 255, 255, 0.1), 
-    transparent 70%);
-  animation: shimmer 3s ease-in-out infinite;
-}
-
-.badge.vip {
-  background: linear-gradient(135deg, #fcd34d, #f59e0b);
-  color: #000;
-  border-color: #f59e0b;
-  text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
-}
-
-.badge.rank {
-  background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
-  color: white;
-  border-color: var(--neon-purple);
-}
-
-.badge.admin {
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: white;
-  border-color: #10b981;
-}
-
-@keyframes badgeGlow {
-  0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
-  50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.6); }
-}
-
-/* ==================== */
-/* NEON BUTTONS */
-/* ==================== */
-
-.btn {
-  position: relative;
-  padding: 16px 32px;
-  border-radius: 16px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  background: var(--gradient-primary);
-  border: none;
-  overflow: hidden;
-  transition: var(--transition-normal);
-  color: white;
-  backdrop-filter: blur(10px);
-  isolation: isolate;
-}
-
-.btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--gradient-secondary);
-  opacity: 0;
-  transition: opacity 0.3s;
-  z-index: -1;
-}
-
-.btn::after {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  background: var(--gradient-primary);
-  z-index: -2;
-  border-radius: 18px;
-  filter: blur(10px);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.btn:hover::before {
-  opacity: 1;
-}
-
-.btn:hover::after {
-  opacity: 0.6;
-}
-
-.btn:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 
-    0 12px 32px rgba(139, 92, 246, 0.4),
-    0 0 40px rgba(139, 92, 246, 0.3);
-}
-
-.btn:active {
-  transform: translateY(-2px) scale(1);
-  transition: var(--transition-fast);
-}
-
-.btn span {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-/* ==================== */
-/* ANIMATED LIST ITEMS */
-/* ==================== */
-
-.peer-item {
-  background: rgba(40, 40, 60, 0.5);
-  border: 1px solid rgba(139, 92, 246, 0.1);
-  border-radius: 20px;
-  padding: 24px;
-  margin-bottom: 16px;
-  transition: var(--transition-normal);
-  backdrop-filter: blur(10px);
-  position: relative;
-  overflow: hidden;
-  animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.peer-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent);
-  transition: left 0.8s;
-}
-
-.peer-item:hover::before {
-  left: 100%;
-}
-
-.peer-item:hover {
-  background: rgba(50, 50, 70, 0.6);
-  border-color: var(--neon-purple);
-  transform: translateY(-6px);
-  box-shadow: 
-    0 12px 32px rgba(0, 0, 0, 0.3),
-    0 0 30px rgba(139, 92, 246, 0.2);
-}
-
-@keyframes slideInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ==================== */
-/* GLOWING CHARTS */
-/* ==================== */
-
-.chart-container {
-  background: rgba(25, 25, 40, 0.6);
-  backdrop-filter: blur(20px);
-  border-radius: 24px;
-  padding: 24px;
-  margin-top: 24px;
-  border: 1px solid var(--glass-border);
-  position: relative;
-  overflow: hidden;
-}
-
-.chart-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--gradient-primary);
-  animation: chartGlow 4s ease-in-out infinite;
-}
-
-@keyframes chartGlow {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
-}
-
-/* ==================== */
-/* NEON MODALS */
-/* ==================== */
-
-.modal-content {
-  background: rgba(20, 20, 35, 0.95);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
-  border-radius: 32px;
-  box-shadow: 
-    0 32px 80px rgba(0, 0, 0, 0.5),
-    var(--shadow-glow-xl);
-  border: 1px solid var(--glass-border);
-  animation: modalAppear 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.modal-content::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 0%, 
-    rgba(139, 92, 246, 0.1) 0%, 
-    transparent 50%);
-  pointer-events: none;
-}
-
-@keyframes modalAppear {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(40px);
-    filter: blur(10px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-    filter: blur(0);
-  }
-}
-
-/* ==================== */
-/* GLOWING RADIO INPUTS */
-/* ==================== */
-
-.radio-inputs {
-  background: rgba(30, 30, 50, 0.6);
-  border-radius: 20px;
-  padding: 8px;
-  box-shadow: 
-    inset 0 2px 4px rgba(0, 0, 0, 0.3),
-    var(--shadow-glow);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(10px);
-}
-
-.radio-inputs .radio .name {
-  border-radius: 16px;
-  padding: 16px 28px;
-  font-weight: 600;
-  background: transparent;
-  border: 2px solid transparent;
-  transition: var(--transition-normal);
-  color: #a5b4fc;
-  position: relative;
-  overflow: hidden;
-}
-
-.radio-inputs .radio input:checked + .name {
-  background: var(--gradient-primary);
-  color: white;
-  box-shadow: 
-    0 8px 24px rgba(139, 92, 246, 0.4),
-    inset 0 2px 8px rgba(255, 255, 255, 0.1);
-  border-color: transparent;
-  animation: radioSelect 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes radioSelect {
-  0% { transform: scale(0.95); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-/* ==================== */
-/* GLOWING STATUS */
-/* ==================== */
-
-.user-status {
-  padding: 8px 20px;
-  border-radius: 24px;
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.04em;
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
-  border: 1px solid transparent;
-}
-
-.status-online {
-  background: var(--gradient-success);
-  color: white;
-  border-color: #10b981;
-  animation: statusPulse 2s ease-in-out infinite;
-}
-
-.status-offline {
-  background: linear-gradient(135deg, #4b5563, #374151);
-  color: #d1d5db;
-  border-color: #4b5563;
-}
-
-@keyframes statusPulse {
-  0%, 100% { 
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); 
-  }
-  50% { 
-    box-shadow: 0 0 30px rgba(16, 185, 129, 0.6); 
-  }
-}
-
-/* ==================== */
-/* GLOWING DAY TABS */
-/* ==================== */
-
-.days-tabs {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  background: rgba(30, 30, 50, 0.5);
-  padding: 16px;
-  border-radius: 24px;
-  margin-bottom: 32px;
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-}
-
-.day-tab {
-  padding: 12px 24px;
-  border-radius: 20px;
-  background: rgba(40, 40, 60, 0.6);
-  border: 2px solid rgba(139, 92, 246, 0.2);
-  color: #a5b4fc;
-  font-weight: 600;
-  transition: var(--transition-normal);
-  position: relative;
-  overflow: hidden;
-}
-
-.day-tab::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--gradient-primary);
-  opacity: 0;
-  transition: opacity 0.3s;
-  z-index: -1;
-}
-
-.day-tab.active::before {
-  opacity: 1;
-}
-
-.day-tab.active {
-  color: white;
-  border-color: transparent;
-  box-shadow: 
-    0 8px 24px rgba(139, 92, 246, 0.4),
-    0 0 20px rgba(139, 92, 246, 0.3);
-  animation: tabBounce 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.day-tab:hover:not(.active) {
-  background: rgba(50, 50, 70, 0.8);
-  border-color: var(--neon-purple);
-  transform: translateY(-4px);
-  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);
-}
-
-@keyframes tabBounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-/* ==================== */
-/* GLOWING LOG ITEMS */
-/* ==================== */
-
-.log-item {
-  background: rgba(30, 30, 50, 0.5);
-  border-radius: 20px;
-  padding: 24px;
-  margin-bottom: 16px;
-  border-left: 6px solid var(--neon-purple);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  transition: var(--transition-normal);
-  backdrop-filter: blur(10px);
-  position: relative;
-  overflow: hidden;
-  animation: logSlideIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  opacity: 0;
-  transform: translateX(-20px);
-}
-
-.log-item::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, 
-    rgba(139, 92, 246, 0.1) 0%,
-    transparent 50%);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.log-item:hover::after {
-  opacity: 1;
-}
-
-.log-item:hover {
-  transform: translateX(12px);
-  box-shadow: 
-    0 12px 32px rgba(0, 0, 0, 0.3),
-    0 0 30px rgba(139, 92, 246, 0.2);
-}
-
-@keyframes logSlideIn {
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Типы логов */
-.log-item.finance {
-  border-left-color: #10b981;
-  background: linear-gradient(135deg, 
-    rgba(16, 185, 129, 0.1),
-    rgba(30, 30, 50, 0.5));
-}
-
-.log-item.system {
-  border-left-color: #3b82f6;
-  background: linear-gradient(135deg, 
-    rgba(59, 130, 246, 0.1),
-    rgba(30, 30, 50, 0.5));
-}
-
-.log-item.error {
-  border-left-color: #ef4444;
-  background: linear-gradient(135deg, 
-    rgba(239, 68, 68, 0.1),
-    rgba(30, 30, 50, 0.5));
-}
-
-/* ==================== */
-/* NEON LOADER */
-/* ==================== */
-
-.loading-indicator {
-  background: rgba(25, 25, 40, 0.9);
-  border-radius: 32px;
-  padding: 60px;
-  box-shadow: 
-    var(--shadow-glow-xl),
-    inset 0 2px 8px rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(40px);
-  position: relative;
-  overflow: hidden;
-}
-
-.loading-indicator::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: conic-gradient(
-    from 0deg,
-    transparent,
-    var(--neon-purple),
-    var(--neon-pink),
-    var(--neon-purple),
-    transparent
-  );
-  animation: rotate 3s linear infinite;
-}
-
-.loading-indicator > * {
-  position: relative;
-  z-index: 1;
-}
-
-.spinner {
-  border: 4px solid transparent;
-  border-top: 4px solid var(--neon-purple);
-  border-right: 4px solid var(--neon-pink);
-  border-bottom: 4px solid var(--neon-blue);
-  border-radius: 50%;
-  width: 80px;
-  height: 80px;
-  animation: spin 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  position: relative;
-}
-
-.spinner::before {
-  content: '';
-  position: absolute;
-  inset: -6px;
-  border: 2px solid var(--neon-purple);
-  border-radius: 50%;
-  animation: pulseRing 2s ease-in-out infinite;
-}
-
-@keyframes pulseRing {
-  0%, 100% { 
-    opacity: 0.3; 
-    transform: scale(0.95);
-  }
-  50% { 
-    opacity: 1; 
-    transform: scale(1.05);
-  }
-}
-
-/* ==================== */
-/* NEON HEADER */
-/* ==================== */
-
-header {
-  background: rgba(15, 15, 25, 0.8);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
-  height: 80px;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  border-bottom: 1px solid var(--glass-border);
-}
-
-.logo {
-  width: 48px;
-  height: 48px;
-  background: var(--gradient-primary);
-  border-radius: 16px;
-  box-shadow: 
-    0 8px 24px rgba(139, 92, 246, 0.4),
-    inset 0 2px 4px rgba(255, 255, 255, 0.2);
-  position: relative;
-  overflow: hidden;
-  animation: logoFloat 6s ease-in-out infinite;
-}
-
-@keyframes logoFloat {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(5deg); }
-}
-
-/* ==================== */
-/* GLOWING FORM INPUTS */
-/* ==================== */
-
-.form-input,
-.form-input-modal,
-.form-select-modal {
-  background: rgba(40, 40, 60, 0.6);
-  border: 2px solid rgba(139, 92, 246, 0.2);
-  border-radius: 16px;
-  padding: 16px 20px;
-  font-size: 16px;
-  transition: var(--transition-normal);
-  color: #e2e8f0;
-  backdrop-filter: blur(10px);
-  box-shadow: 
-    inset 0 2px 4px rgba(0, 0, 0, 0.2),
-    0 0 0 rgba(139, 92, 246, 0);
-}
-
-.form-input:focus,
-.form-input-modal:focus,
-.form-select-modal:focus {
-  background: rgba(50, 50, 70, 0.8);
-  border-color: var(--neon-purple);
-  box-shadow: 
-    0 0 0 4px rgba(139, 92, 246, 0.1),
-    inset 0 2px 4px rgba(0, 0, 0, 0.2),
-    0 0 20px rgba(139, 92, 246, 0.2);
-  outline: none;
-  animation: inputFocus 0.3s ease-out;
-}
-
-@keyframes inputFocus {
-  from {
-    box-shadow: 
-      0 0 0 0 rgba(139, 92, 246, 0.2),
-      inset 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-}
-
-/* ==================== */
-/* PARTICLE BACKGROUND */
-/* ==================== */
-
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: 
-    radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: -1;
-  animation: bgFloat 20s ease-in-out infinite;
-}
-
-@keyframes bgFloat {
-  0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(-20px, -20px); }
-  50% { transform: translate(20px, 20px); }
-  75% { transform: translate(-20px, 20px); }
-}
-
-/* ==================== */
-/* SCROLLBAR STYLING */
-/* ==================== */
-
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(30, 30, 50, 0.3);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--gradient-primary);
-  border-radius: 10px;
-  border: 2px solid rgba(15, 15, 25, 0.3);
-  animation: scrollThumbGlow 3s ease-in-out infinite;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--gradient-secondary);
-}
-
-@keyframes scrollThumbGlow {
-  0%, 100% { box-shadow: 0 0 10px rgba(139, 92, 246, 0.5); }
-  50% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.8); }
-}
-
-/* ==================== */
-/* FLOATING PARTICLES */
-/* ==================== */
-
-.particle {
-  position: fixed;
-  pointer-events: none;
-  z-index: -1;
-  animation: floatParticle linear infinite;
-}
-
-@keyframes floatParticle {
-  to {
-    transform: translateY(-100vh) rotate(360deg);
-  }
-}
-
-/* ==================== */
-/* RESPONSIVE ENHANCEMENTS */
-/* ==================== */
-
-@media (max-width: 768px) {
-  :root {
-    --section-spacing: 20px;
-  }
-  
-  .card {
-    padding: 24px;
-    border-radius: 20px;
-    margin: 0 16px 20px;
-  }
-  
-  .card h2 {
-    font-size: 24px;
-  }
-  
-  .avatar {
-    width: 120px;
-    height: 120px;
-  }
-  
-  .btn {
-    padding: 14px 24px;
-  }
-  
-  .modal-content {
-    margin: 10% 16px;
-    width: auto;
-  }
-  
-  /* Уменьшаем размытие на мобильных */
-  .card,
-  .modal-content,
-  header {
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-  }
-}
-
-/* ==================== */
-/* CUSTOM CURSOR */
-/* ==================== */
-
-* {
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='8' fill='%238b5cf6' opacity='0.7'/%3E%3Ccircle cx='16' cy='16' r='4' fill='white'/%3E%3C/svg%3E") 16 16, auto;
-}
-
-a, button, .btn, .peer-button {
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='%23ec4899' opacity='0.7'/%3E%3Ccircle cx='16' cy='16' r='6' fill='white'/%3E%3C/svg%3E") 16 16, pointer;
-}
-
-/* ==================== */
-/* TOAST NOTIFICATIONS */
-/* ==================== */
-
-.toast {
-  background: rgba(30, 30, 50, 0.9);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  border-left: 4px solid var(--neon-purple);
-  animation: toastSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    var(--shadow-glow);
-}
-
-.toast.success {
-  border-left-color: #10b981;
-  background: linear-gradient(135deg, 
-    rgba(16, 185, 129, 0.2),
-    rgba(30, 30, 50, 0.9));
-}
-
-.toast.error {
-  border-left-color: #ef4444;
-  background: linear-gradient(135deg, 
-    rgba(239, 68, 68, 0.2),
-    rgba(30, 30, 50, 0.9));
-}
-
-@keyframes toastSlideIn {
-  from {
-    opacity: 0;
-    transform: translateX(100px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* ==================== */
-/* HOVER EFFECTS */
-/* ==================== */
-
-.hover-lift {
-  transition: var(--transition-normal);
-}
-
-.hover-lift:hover {
-  transform: translateY(-4px);
-}
-
-.hover-glow {
-  transition: var(--transition-normal);
-}
-
-.hover-glow:hover {
-  box-shadow: var(--shadow-glow-lg);
-}
-
-.hover-scale {
-  transition: var(--transition-normal);
-}
-
-.hover-scale:hover {
-  transform: scale(1.05);
-}
-
-/* ==================== */
-/* GRADIENT TEXT */
-/* ==================== */
-
-.gradient-text {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.gradient-text-secondary {
-  background: var(--gradient-secondary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ==================== */
-/* FINAL TOUCHES */
-/* ==================== */
-
-::selection {
-  background: rgba(139, 92, 246, 0.4);
-  color: white;
-  text-shadow: none;
-}
-
-::-moz-selection {
-  background: rgba(139, 92, 246, 0.4);
-  color: white;
-  text-shadow: none;
-}
-
-/* Плавный скролл с параллаксом */
-* {
-  scroll-behavior: smooth;
-  scroll-padding-top: 100px;
-}
-
-/* Оптимизация анимаций */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ХОЗЯЕВА EMPIRE</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Сброс стилей */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Цветовая схема */
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --secondary: #ec4899;
+            --accent: #06b6d4;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --surface-light: #334155;
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            
+            /* Градиенты */
+            --gradient-primary: linear-gradient(135deg, var(--primary), var(--secondary));
+            --gradient-dark: linear-gradient(135deg, #1e1b4b, #312e81);
+            --gradient-success: linear-gradient(135deg, var(--success), #34d399);
+            
+            /* Тени */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+            --shadow-neon: 0 0 20px rgba(139, 92, 246, 0.5);
+            --shadow-neon-lg: 0 0 40px rgba(139, 92, 246, 0.7);
+            
+            /* Закругления */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-full: 9999px;
+            
+            /* Анимации */
+            --transition-fast: 150ms ease;
+            --transition-normal: 300ms ease;
+            --transition-slow: 500ms ease;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
+            overflow-x: hidden;
+        }
+
+        /* Стили для header */
+        header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 64px;
+            padding: 0 20px;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 20px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: var(--shadow-neon);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Стили для навигации */
+        .radio-inputs {
+            display: flex;
+            gap: 8px;
+            background: var(--surface);
+            padding: 8px;
+            border-radius: var(--radius-lg);
+            max-width: 400px;
+            margin: 20px auto;
+            box-shadow: var(--shadow-md);
+        }
+
+        .radio {
+            flex: 1;
+        }
+
+        .radio input[type="radio"] {
+            display: none;
+        }
+
+        .radio .name {
+            display: block;
+            padding: 12px 20px;
+            text-align: center;
+            background: transparent;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-normal);
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .radio input[type="radio"]:checked + .name {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-neon);
+        }
+
+        /* Основной контейнер */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Карточки */
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-normal);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg), var(--shadow-neon);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            animation: border-flow 3s linear infinite;
+        }
+
+        @keyframes border-flow {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .card h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Информационные строки */
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: rgba(51, 65, 85, 0.3);
+            border-radius: var(--radius-lg);
+            margin-bottom: 12px;
+            transition: var(--transition-normal);
+            border-left: 4px solid transparent;
+        }
+
+        .info-row:hover {
+            background: rgba(51, 65, 85, 0.5);
+            border-left-color: var(--primary);
+            transform: translateX(8px);
+        }
+
+        .info-row strong {
+            color: var(--text);
+            font-weight: 600;
+            min-width: 200px;
+        }
+
+        .info-row span {
+            color: var(--text-secondary);
+        }
+
+        /* Аватар */
+        .avatar-container {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 30%;
+            object-fit: cover;
+            border: 4px solid transparent;
+            background: var(--gradient-primary);
+            padding: 4px;
+            box-shadow: var(--shadow-neon);
+            transition: var(--transition-normal);
+        }
+
+        .avatar:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: var(--shadow-neon-lg);
+        }
+
+        /* Бейджи */
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 4px;
+        }
+
+        .badge.vip {
+            background: linear-gradient(135deg, #fcd34d, #f59e0b);
+            color: #000;
+        }
+
+        .badge.rank {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .badge.admin {
+            background: var(--gradient-success);
+            color: white;
+        }
+
+        /* Кнопки */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: var(--transition-slow);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-neon);
+        }
+
+        .btn.purple {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn.warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .btn.danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        /* Секции */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Сетки */
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        /* График */
+        .chart-container {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-top: 24px;
+            height: 300px;
+        }
+
+        /* Логи */
+        .log-item {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--primary);
+            transition: var(--transition-normal);
+        }
+
+        .log-item:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .log-item.finance {
+            border-left-color: var(--success);
+        }
+
+        .log-item.system {
+            border-left-color: var(--info);
+        }
+
+        .log-item.error {
+            border-left-color: var(--danger);
+        }
+
+        /* Список пользователей */
+        .user-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition-normal);
+        }
+
+        .user-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .user-status {
+            padding: 6px 12px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-online {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .status-offline {
+            background: rgba(100, 116, 139, 0.2);
+            color: var(--text-secondary);
+            border: 1px solid var(--text-secondary);
+        }
+
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            max-width: 500px;
+            margin: 10% auto;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .close {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition-fast);
+        }
+
+        .close:hover {
+            color: var(--text);
+        }
+
+        /* Формы */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(51, 65, 85, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text);
+            font-size: 16px;
+            transition: var(--transition-normal);
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Загрузка */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            backdrop-filter: blur(10px);
+        }
+
+        .loading-indicator {
+            text-align: center;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(139, 92, 246, 0.3);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Уведомления */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            z-index: 4000;
+            animation: toastSlideIn 0.3s ease;
+            max-width: 400px;
+            border-left: 4px solid var(--primary);
+        }
+
+        @keyframes toastSlideIn {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .toast.success {
+            border-left-color: var(--success);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .card {
+                padding: 24px 16px;
+            }
+            
+            .avatar-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .property-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .radio-inputs {
+                flex-direction: column;
+            }
+            
+            .modal-content {
+                margin: 20% 16px;
+                padding: 24px;
+            }
+        }
+
+        /* Прокрутка */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--surface-light);
+            border-radius: var(--radius-full);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Утилитарные классы */
+        .text-gradient {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .shadow-neon {
+            box-shadow: var(--shadow-neon);
+        }
+    </style>
 </head>
 <body>
-  <div id="toastContainer"></div>
-<header>
-<div class="profile-dropdown">
-    <div class="profile-icon" aria-label="Меню профиля" id="profileMenu">
-    <img src="profile-icon.jpg" alt="Логотип сайта" style="width: 38px; height: 38px; border-radius: 30%;">
-    </div>
-</header>
-<div class="container">
-  <div class="radio-inputs">
-    <label class="radio">
-      <input type="radio" name="radio" <?php echo $active_section === 'profile' ? 'checked' : ''; ?> data-section="profile">
-      <span class="name">Профиль</span>
-    </label>
-
-    <label class="radio">
-      <input type="radio" name="radio" <?php echo $active_section === 'groups' ? 'checked' : ''; ?> data-section="groups">
-      <span class="name">Беседы</span>
-    </label>
-
-    <label class="radio">
-      <input type="radio" name="radio" <?php echo $active_section === 'panel' ? 'checked' : ''; ?> data-section="panel">
-      <span class="name">Панель</span>
-</label>
-  </div>   
-</div>
-
-    <div id="loading-overlay" class="loading-overlay" style="display: none;">
-        <div class="loading-indicator">
-            <div class="spinner"></div>
-            <p>Загрузка ваших данных...</p>
+    <div id="toastContainer"></div>
+    
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-icon">H</div>
+                <span>HOZYA EMPIRE</span>
+            </div>
+            <div class="profile-dropdown">
+                <div class="profile-icon" aria-label="Меню профиля" id="profileMenu">
+                    <img src="profile-icon.jpg" alt="Профиль" style="width: 38px; height: 38px; border-radius: 50%;">
+                </div>
+            </div>
         </div>
-    </div>
+    </header>
 
-    <section id="profile-section" class="content-section <?php echo $active_section === 'profile' ? 'active' : ''; ?>">
-        <?php if ($from_id && $site): ?>
-            <div class="card" aria-labelledby="user-info-title">
-                <h2 id="user-info-title">
-                    Информация о пользователе
-                </h2>
-                
-                <div class="user-profile">
+    <div class="container">
+        <div class="radio-inputs">
+            <label class="radio">
+                <input type="radio" name="radio" <?php echo ($active_section ?? 'profile') === 'profile' ? 'checked' : ''; ?> data-section="profile">
+                <span class="name">Профиль</span>
+            </label>
+            <label class="radio">
+                <input type="radio" name="radio" <?php echo ($active_section ?? 'profile') === 'groups' ? 'checked' : ''; ?> data-section="groups">
+                <span class="name">Беседы</span>
+            </label>
+            <label class="radio">
+                <input type="radio" name="radio" <?php echo ($active_section ?? 'profile') === 'panel' ? 'checked' : ''; ?> data-section="panel">
+                <span class="name">Панель</span>
+            </label>
+        </div>
+
+        <div id="loading-overlay" class="loading-overlay" style="display: none;">
+            <div class="loading-indicator">
+                <div class="spinner"></div>
+                <p>Загрузка ваших данных...</p>
+            </div>
+        </div>
+
+        <section id="profile-section" class="content-section <?php echo ($active_section ?? 'profile') === 'profile' ? 'active' : ''; ?>">
+            <?php if (isset($site) && $site): ?>
+                <div class="card">
+                    <h2 class="text-gradient">Информация о пользователе</h2>
+                    
                     <div class="avatar-container">
                         <img src="<?php 
-                            if (intval($site['avatar_url']) == 1) {
+                            if (isset($site['avatar_url']) && intval($site['avatar_url']) == 1) {
                                 $avatar = "profile-icon.jpg"; 
                             } else {
-                                $avatar = $site['avatar_url'];
+                                $avatar = $site['avatar_url'] ?? "profile-icon.jpg";
                             } 
-                            echo $avatar; 
+                            echo htmlspecialchars($avatar); 
                         ?>" alt="Аватар пользователя" class="avatar">
                         
-                        <?php
-                        $vip_name = [
-                            1 => "DEF Хозяенёнок",
-                            2 => "VIP Хозяенёнок",
-                            3 => "PREMIUM Хозяенёнок",
-                        ];
-                        $vip = $vip_name[$site['vip'] ?? 0] ?? false;
-                        if ($vip): ?>
-                        <span class="badge vip"><?php echo $vip; ?></span>
+                        <?php if (isset($site['vip']) && $site['vip'] > 0): ?>
+                            <?php
+                            $vip_name = [
+                                1 => "DEF Хозяенёнок",
+                                2 => "VIP Хозяенёнок",
+                                3 => "PREMIUM Хозяенёнок",
+                            ];
+                            $vip = $vip_name[$site['vip']] ?? false;
+                            ?>
+                            <?php if ($vip): ?>
+                                <span class="badge vip"><?php echo htmlspecialchars($vip); ?></span>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </div>
                     
                     <div class="user-info">
                         <div class="info-row">
-                            <strong>Ник в системе:</strong><br>
-                            <?php echo htmlspecialchars($site['Text'] ?? 'Не указан'); ?>
+                            <strong>Ник в системе:</strong>
+                            <span><?php echo htmlspecialchars($site['Text'] ?? 'Не указан'); ?></span>
                         </div>
                         
                         <div class="info-row">
-                            <strong>Права Администратора:</strong><br>
-                            <?php
-                            $admin_names = [
-                                0 => "Пользователь",
-                                1 => "Администратор",
-                                2 => "Супер-Администратор",
-                            ];
-                            $admin_text = $admin_names[$site['is_admin'] ?? 0] ?? "Ошибка";
-                            echo $admin_text;
-                            ?>
+                            <strong>Права Администратора:</strong>
+                            <span>
+                                <?php
+                                $admin_names = [
+                                    0 => "Пользователь",
+                                    1 => "Администратор",
+                                    2 => "Супер-Администратор",
+                                ];
+                                echo htmlspecialchars($admin_names[$site['is_admin'] ?? 0] ?? "Ошибка");
+                                ?>
+                            </span>
                         </div>
                         
                         <div class="info-row">
-                            <strong>Имя пользователя:</strong><br>
-                            @<?php echo htmlspecialchars($site['username'] ?? 'Не указан'); ?>
+                            <strong>Имя пользователя:</strong>
+                            <span>@<?php echo htmlspecialchars($site['username'] ?? 'Не указан'); ?></span>
                         </div>
                         
                         <div class="info-row">
-                            <strong>ID:</strong><br>
-                            <?php echo htmlspecialchars($site['tg_id'] ?? 'Не указан'); ?>
+                            <strong>ID:</strong>
+                            <span><?php echo htmlspecialchars($site['tg_id'] ?? 'Не указан'); ?></span>
                         </div>
                         
                         <div class="info-row">
-                            <strong>Количество цепей:</strong><br> 
-                            <?php echo htmlspecialchars($site['cep'] ?? '0'); ?>
+                            <strong>Количество цепей:</strong>
+                            <span><?php echo htmlspecialchars($site['cep'] ?? '0'); ?></span>
                         </div>
                         
                         <div class="info-row">
-                            <strong>Ранг в системе:</strong> <br>
-                            <?php
-                            $rank_names = [
-                                3 => "🔧 Хозяетрудник",
-                                4 => "🛡️ Хозяестраж",
-                                5 => "🎓 Хозяемастер",
-                                7 => "👶 Пупсик",
-                                8 => "💰 $ Мажор $",
-                                9 => "👔 Заместитель",
-                                10 => "👑 Гл.ХОЗЯИН",
-                                11 => "👤 Гл.Заместитель",
-                            ];
-                            $rank_name = $rank_names[$site['rang'] ?? 0] ?? "Неизвестный";
-                            echo $rank_name;
-                            ?>
+                            <strong>Ранг в системе:</strong>
+                            <span>
+                                <?php
+                                $rank_names = [
+                                    3 => "🔧 Хозяетрудник",
+                                    4 => "🛡️ Хозяестраж",
+                                    5 => "🎓 Хозяемастер",
+                                    7 => "👶 Пупсик",
+                                    8 => "💰 $ Мажор $",
+                                    9 => "👔 Заместитель",
+                                    10 => "👑 Гл.ХОЗЯИН",
+                                    11 => "👤 Гл.Заместитель",
+                                ];
+                                echo htmlspecialchars($rank_names[$site['rang'] ?? 0] ?? "Неизвестный");
+                                ?>
+                            </span>
                             <span class="badge rank">Ранг</span>
                         </div>
                         
                         <div class="info-row">
-                            <strong>День рождения:</strong><br>
-                            <?php
-                            $months = [
-                                1 => 'января', 2 => 'февраля', 3 => 'марта', 4 => 'апреля', 5 => 'мая', 6 => 'июня',
-                                7 => 'июля', 8 => 'августа', 9 => 'сентября', 10 => 'октября', 11 => 'ноября', 12 => 'декабря'
-                            ];
-                            if (!$bday) {
-                                $birth = 'Не установлен';
-                            } else {
-                                if (strpos($bday['birthday'], '.') !== false && strlen($bday['birthday']) == 5) {
-                                    $bday['birthday'] .= '.' . date('Y');
-                                }
-                                $date = strtotime($bday['birthday']);
-                                if ($date === false) {
-                                    echo 'Ошибка преобразования даты!';
+                            <strong>День рождения:</strong>
+                            <span>
+                                <?php
+                                $months = [
+                                    1 => 'января', 2 => 'февраля', 3 => 'марта', 4 => 'апреля', 5 => 'мая', 6 => 'июня',
+                                    7 => 'июля', 8 => 'августа', 9 => 'сентября', 10 => 'октября', 11 => 'ноября', 12 => 'декабря'
+                                ];
+                                
+                                if (isset($bday) && $bday && isset($bday['birthday'])) {
+                                    $birthday = $bday['birthday'];
+                                    if (strpos($birthday, '.') !== false && strlen($birthday) == 5) {
+                                        $birthday .= '.' . date('Y');
+                                    }
+                                    $date = strtotime($birthday);
+                                    if ($date !== false) {
+                                        $day = date('j', $date);
+                                        $monthNumber = (int)date('m', $date);
+                                        $month = $months[$monthNumber] ?? '';
+                                        echo htmlspecialchars($day . ' ' . $month);
+                                    } else {
+                                        echo 'Ошибка преобразования даты!';
+                                    }
                                 } else {
-                                    $day = date('j', $date);
-                                    $monthNumber = (int)date('m', $date);
-                                    $month = $months[$monthNumber];
-                                    $birth = $day . ' ' . $month;
-                                    $birth = mb_convert_case($birth, MB_CASE_TITLE, 'UTF-8');
+                                    echo 'Не установлен';
                                 }
-                            }
-
-                            echo $birth;
-                            ?>
+                                ?>
+                            </span>
                         </div>
+                        
                         <div class="info-row">
-                            <strong>Ваш город:</strong><br>
-                            <?php
-                            echo $site['city'] ?? 'Не установлен';
-                            ?>
+                            <strong>Ваш город:</strong>
+                            <span><?php echo htmlspecialchars($site['city'] ?? 'Не установлен'); ?></span>
                         </div>
-                     <button type="button" class="btn warning" onclick="window.location.href='/map'">
-    Посмотреть карту
-</button>
+                        
+                        <div style="margin-top: 24px;">
+                            <button type="button" class="btn warning" onclick="window.location.href='/map'">
+                                Посмотреть карту
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <section class="card" aria-labelledby="balances-title">
-                <h2 id="balances-title">
-                    Ваши балансы
-                </h2>
-                
-                <div class="info-row">
-                    <strong>Hozyaecoin:</strong> 
-                    <?php echo number_format($site['money'] ?? 0, 0, ".", ","); ?> £ hoz
+                <div class="card">
+                    <h2 class="text-gradient">Ваши балансы</h2>
+                    
+                    <div class="info-row">
+                        <strong>Hozyaecoin:</strong>
+                        <span><?php echo number_format($site['money'] ?? 0, 0, ".", ","); ?> £ hoz</span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <strong>👾 BTC:</strong>
+                        <span><?php echo number_format($site['btc'] ?? 0, 0, ".", ","); ?></span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <strong>🎩 ETH:</strong>
+                        <span><?php echo number_format($site['eth'] ?? 0, 0, ".", ","); ?></span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <strong>👾 TON:</strong>
+                        <span><?php echo number_format($site['ton'] ?? 0, 0, ".", ","); ?></span>
+                    </div>
                 </div>
-                <div class="info-row" style="margin-top:12px;">
-                    <strong>👾 BTC:</strong> 
-                    <?php echo number_format($site['btc'] ?? 0, 0, ".", ","); ?> 
-                </div>
-                <div class="info-row" style="margin-top:12px;">
-                    <strong>🎩 ETH:</strong> 
-                    <?php echo number_format($site['eth'] ?? 0, 0, ".", ","); ?> 
-                </div>
-                <div class="info-row" style="margin-top:12px;">
-                    <strong>👾 TON:</strong> 
-                    <?php echo number_format($site['ton'] ?? 0, 0, ".", ","); ?> 
-                </div>
-            </section>
-            <section class="card" aria-labelledby="balances-title">
-                <h2 id="balances-title">
-                    🤵🏻 Х🅾️ЗЯЕВ🅰️ | М🅰️ФИЯ
-                </h2>
-                
-                <div class="info-row" style="margin-top:12px;">
-                    <strong>💎 Камней:</strong> 
-                    <?php echo number_format($site['kamni'] ?? 0, 0, ".", ","); ?> 
-                </div>
-                <div class="info-row" style="margin-top:12px;">
-                    <strong>💵 Деньги:</strong> 
-                    <?php echo number_format($site['moneymaf'] ?? 0, 0, ".", ","); ?> 
-                </div>
-                <div class="info-row" style="margin-top:12px;">
-                    <strong>🛡 Защита:</strong> 
-                    <?php echo number_format($site['maf_protect'] ?? 0, 0, ".", ","); ?> 
-                </div>
-                <div class="info-row" style="margin-top:12px;">
-                    <strong>📑 Документы:</strong> 
-                    <?php echo number_format($site['maf_doc'] ?? 0, 0, ".", ","); ?> 
-                </div>
-                <div class="info-row" style="margin-top:12px;">
-                    <strong>🎎 Активная роль:</strong> 
-                    <?php echo number_format($site['maf_activerole'] ?? 0, 0, ".", ","); ?> 
-                </div>
-            </section>
 
-            <section class="card" aria-labelledby="property-title">
-                <h2 id="property-title">
-                    Взаимодействие и имущество
-                </h2>
-                
-                <div class="balances-property">
+                <div class="card">
+                    <h2 class="text-gradient">🤵🏻 Х🅾️ЗЯЕВ🅰️ | М🅰️ФИЯ</h2>
+                    
+                    <div class="info-row">
+                        <strong>💎 Камней:</strong>
+                        <span><?php echo number_format($site['kamni'] ?? 0, 0, ".", ","); ?></span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <strong>💵 Деньги:</strong>
+                        <span><?php echo number_format($site['moneymaf'] ?? 0, 0, ".", ","); ?></span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <strong>🛡 Защита:</strong>
+                        <span><?php echo number_format($site['maf_protect'] ?? 0, 0, ".", ","); ?></span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <strong>📑 Документы:</strong>
+                        <span><?php echo number_format($site['maf_doc'] ?? 0, 0, ".", ","); ?></span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <strong>🎎 Активная роль:</strong>
+                        <span><?php echo number_format($site['maf_activerole'] ?? 0, 0, ".", ","); ?></span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="text-gradient">Взаимодействие и имущество</h2>
+                    
                     <div class="property-grid">
-                        <div class="info-row"><strong>Автомобиль:</strong><br> <?php echo !empty($site['cars']) ? htmlspecialchars($site['cars']) : 'Нету'; ?></div>
-                        <div class="info-row"><strong>Недвижимость:</strong><br> <?php echo !empty($site['houses']) ? htmlspecialchars($site['houses']) : 'Нету'; ?></div>
-                        <div class="info-row"><strong>Яхта:</strong><br> <?php echo !empty($site['yachts']) ? htmlspecialchars($site['yachts']) : 'Нету'; ?></div>
-                        <div class="info-row"><strong>Самолет:</strong><br> <?php echo !empty($site['planes']) ? htmlspecialchars($site['planes']) : 'Нету'; ?></div>
-                        <div class="info-row"><strong>Вертолет:</strong><br> <?php echo !empty($site['helicopters']) ? htmlspecialchars($site['helicopters']) : 'Нету'; ?></div>
-                        <div class="info-row"><strong>Телефон:</strong><br> <?php echo !empty($site['phones']) ? htmlspecialchars($site['phones']) : 'Нету'; ?></div>
-                        <div class="info-row"><strong>Компьютер:</strong><br> <?php echo !empty($site['pcs']) ? htmlspecialchars($site['pcs']) : 'Нету'; ?></div>
+                        <div class="info-row">
+                            <strong>Автомобиль:</strong>
+                            <span><?php echo !empty($site['cars']) ? htmlspecialchars($site['cars']) : 'Нету'; ?></span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <strong>Недвижимость:</strong>
+                            <span><?php echo !empty($site['houses']) ? htmlspecialchars($site['houses']) : 'Нету'; ?></span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <strong>Яхта:</strong>
+                            <span><?php echo !empty($site['yachts']) ? htmlspecialchars($site['yachts']) : 'Нету'; ?></span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <strong>Самолет:</strong>
+                            <span><?php echo !empty($site['planes']) ? htmlspecialchars($site['planes']) : 'Нету'; ?></span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <strong>Вертолет:</strong>
+                            <span><?php echo !empty($site['helicopters']) ? htmlspecialchars($site['helicopters']) : 'Нету'; ?></span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <strong>Телефон:</strong>
+                            <span><?php echo !empty($site['phones']) ? htmlspecialchars($site['phones']) : 'Нету'; ?></span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <strong>Компьютер:</strong>
+                            <span><?php echo !empty($site['pcs']) ? htmlspecialchars($site['pcs']) : 'Нету'; ?></span>
+                        </div>
                     </div>
 
-                    <hr>
+                    <div style="margin: 32px 0; height: 1px; background: rgba(255, 255, 255, 0.1);"></div>
 
+                    <h3 style="margin-bottom: 20px;">💼 Бизнесы</h3>
                     <div class="property-grid">
-                        <h3>💼 Бизнесы</h3>
                         <?php
                         $businesses = [
-                            "bukmek"=>["name"=>"Букмекерская контора"],
-                            "magazin"=>["name"=>"Магазин"],
-                            "kafe"=>["name"=>"Кафе"],
-                            "restoran"=>["name"=>"Ресторан"],
-                            "bar"=>["name"=>"Бар"],
-                            "nightclub"=>["name"=>"Ночной клуб"],
-                            "autoshop"=>["name"=>"Автомагазин"],
-                            "cinema"=>["name"=>"Кинотеатр"],
-                            "hotel"=>["name"=>"Отель"],
-                            "casino"=>["name"=>"Казино"]
+                            "bukmek" => "Букмекерская контора",
+                            "magazin" => "Магазин",
+                            "kafe" => "Кафе",
+                            "restoran" => "Ресторан",
+                            "bar" => "Бар",
+                            "nightclub" => "Ночной клуб",
+                            "autoshop" => "Автомагазин",
+                            "cinema" => "Кинотеатр",
+                            "hotel" => "Отель",
+                            "casino" => "Казино"
                         ];
 
                         $hasBiz = false;
-                        foreach ($businesses as $key=>$biz) {
+                        foreach ($businesses as $key => $name) {
                             if (!empty($site["biz_{$key}"])) {
                                 $hasBiz = true;
                                 $level = !empty($site["biz_{$key}_level"]) ? $site["biz_{$key}_level"] : 1;
-                                echo "<div class='info-row'><strong>{$biz['name']}:</strong> Уровень {$level}</div>";
+                                echo "<div class='info-row'><strong>{$name}:</strong><span>Уровень {$level}</span></div>";
                             }
                         }
                         if (!$hasBiz) {
-                            echo "<div class='info-row'>❌ У вас нет бизнесов</div>";
+                            echo "<div class='info-row'><strong>Бизнесы:</strong><span>❌ У вас нет бизнесов</span></div>";
                         }
                         ?>
                     </div>
 
-                    <hr>
+                    <div style="margin: 32px 0; height: 1px; background: rgba(255, 255, 255, 0.1);"></div>
 
+                    <h3 style="margin-bottom: 20px;">🎁 Аксессуары</h3>
                     <div class="property-grid">
-                        <h3>🎁 Аксессуары</h3>
                         <?php
                         $accessories = [
-                            "nimb"=>"Нимб",
-                            "shar"=>"Шар",
-                            "bronzovy_medal"=>"Бронзовая медаль",
-                            "serebryany_medal"=>"Серебряная медаль",
-                            "zolotoy_medal"=>"Золотая медаль",
-                            "angel_wings"=>"Крылья ангела",
-                            "devil_horn"=>"Рога дьявола",
-                            "diamond_ring"=>"Бриллиантовое кольцо",
-                            "magic_orb"=>"Волшебный шар",
-                            "crown"=>"Корона"
+                            "nimb" => "Нимб",
+                            "shar" => "Шар",
+                            "bronzovy_medal" => "Бронзовая медаль",
+                            "serebryany_medal" => "Серебряная медаль",
+                            "zolotoy_medal" => "Золотая медаль",
+                            "angel_wings" => "Крылья ангела",
+                            "devil_horn" => "Рога дьявола",
+                            "diamond_ring" => "Бриллиантовое кольцо",
+                            "magic_orb" => "Волшебный шар",
+                            "crown" => "Корона"
                         ];
 
                         $hasAcc = false;
-                        foreach ($accessories as $key=>$name) {
+                        foreach ($accessories as $key => $name) {
                             if (!empty($site["acc_{$key}"])) {
                                 $hasAcc = true;
-                                echo "<div class='info-row'>✅ {$name}</div>";
+                                echo "<div class='info-row'><strong>{$name}:</strong><span>✅</span></div>";
                             }
                         }
                         if (!$hasAcc) {
-                            echo "<div class='info-row'>❌ У вас нет аксессуаров</div>";
+                            echo "<div class='info-row'><strong>Аксессуары:</strong><span>❌ У вас нет аксессуаров</span></div>";
                         }
                         ?>
                     </div>
                 </div>
-            </section>
-            
-            <section class="card">
-                <h2 id="stats-title">
-                    Статистика сообщений за последние 7 дней
-                </h2>
                 
-                <?php
-                $total_messages = array_sum($message_counts);
-                $average_per_day = $total_messages > 0 ? round($total_messages / 7) : 0;
-                $max_per_day = max($message_counts);
-                ?>
-                
-                <div class="stats-summary">
-                    <div class="stat-item">
-                        <div class="stat-number">Всего сообщений: <?php echo $total_messages; ?></div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">В среднем в день: <?php echo $average_per_day; ?></div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">Максимум в день: <?php echo $max_per_day; ?></div>
-                    </div>
-                </div>
-                
-                <div class="chart-container">
-                    <canvas id="messageChart"></canvas>
-                </div>
-            </section>
-
-<?php    
-function formatTimeAgo($datetime) {
-    $now = new DateTime();
-    $date = new DateTime($datetime);
-    $diff = $now->diff($date);
-    
-    if ($diff->days > 7) {
-        return date('d.m.Y', strtotime($datetime));
-    } elseif ($diff->days > 0) {
-        return $diff->days . ' ' . getRussianWord($diff->days, ['день', 'дня', 'дней']) . ' назад';
-    } elseif ($diff->h > 0) {
-        return $diff->h . ' ' . getRussianWord($diff->h, ['час', 'часа', 'часов']) . ' назад';
-    } elseif ($diff->i > 0) {
-        return $diff->i . ' ' . getRussianWord($diff->i, ['минуту', 'минуты', 'минут']) . ' назад';
-    } else {
-        return 'только что';
-    }
-}
-
-function getRussianWord($number, $words) {
-    $cases = array(2, 0, 1, 1, 1, 2);
-    return $words[($number % 100 > 4 && $number % 100 < 20) ? 2 : $cases[min($number % 10, 5)]]; 
-}
-
-function getLogCategory($logText) {
-    $text = strtolower($logText);
-    
-    $financeKeywords = ['раб', 'деньги', 'выиграл', 'проиграл', 'ставка', 'платеж', 'платежи', 'кошелек', 'пополнение', 'вывод', 'поставил', 'бонус', 'баланс', 'бизнес', 'аксессуар'];
-    $systemKeywords = ['система', 'админ', 'рассылка', 'подписка', 'заблокировал', 'отклонил', 'одобрил', 'запрос', 'семей', 'команду', '/st', 'рассылк'];
-
-    foreach ($financeKeywords as $keyword) {
-        if (strpos($text, $keyword) !== false) {
-            return 'finance';
-        }
-    }
-
-    foreach ($systemKeywords as $keyword) {
-        if (strpos($text, $keyword) !== false) {
-            return 'system';
-        }
-    }
-
-    return 'system';
-}
-
-function getLogIcon($text) {
-    $text = strtolower($text);
-    
-    if (strpos($text, 'в казино и проиграл') !== false || 
-        strpos($text, 'заблокировал') !== false ||
-        strpos($text, 'отклонил запрос') !== false ||
-        strpos($text, 'отписался от рассылки') !== false) {
-        return ['cross', 'activity-icon-red'];
-    } elseif (strpos($text, 'и выиграл с множителем') !== false || 
-             strpos($text, 'раб') !== false ||
-             strpos($text, 'одобрил запрос') !== false ||
-             strpos($text, 'выдал семей') !== false ||
-             strpos($text, 'подписался на рассылку') !== false ||
-             strpos($text, '/st') !== false) {
-        return ['check', 'activity-icon-green'];
-    } elseif (strpos($text, 'админ отправил рассылку') !== false) {
-        return ['message', 'activity-icon-blue'];
-    }
-    
-    return ['message', 'activity-icon-blue'];
-}
-?>
-
-<!-- Улучшенный дизайн логов -->
-<div class="logs-container">
-    <div class="logs-header">
-        <h2>История действий</h2>
-        <div class="logs-filters">
-            <button class="filter-btn active" data-filter="all">Все</button>
-            <button class="filter-btn" data-filter="finance">Финансы</button>
-            <button class="filter-btn" data-filter="system">Система</button>
-        </div>
-    </div>
-
-    <div class="days-navigation">
-        <div class="days-tabs">
-            <?php 
-            $first = true;
-            foreach ($groupedLogs as $day => $dayLogs): 
-                $today = date('Y-m-d');
-                $yesterday = date('Y-m-d', strtotime('-1 day'));
-                
-                if ($day === $today) {
-                    $displayName = 'Сегодня';
-                } elseif ($day === $yesterday) {
-                    $displayName = 'Вчера';
-                } else {
-                    $displayName = date('d.m', strtotime($day));
-                }
-                
-                $financeCount = 0;
-                $systemCount = 0;
-                foreach ($dayLogs as $log) {
-                    $category = getLogCategory($log['log_text']);
-                    if ($category === 'finance') $financeCount++;
-                    if ($category === 'system') $systemCount++;
-                }
-            ?>
-                <button class="day-tab <?php echo $first ? 'active' : ''; ?>" data-day="<?php echo $day; ?>">
-                    <span class="day-name"><?php echo $displayName; ?></span>
-                    <span class="day-stats">
-                        <span class="finance-count"><?php echo $financeCount; ?></span>/
-                        <span class="system-count"><?php echo $systemCount; ?></span>
-                    </span>
-                </button>
-            <?php 
-                $first = false;
-            endforeach; 
-            ?>
-        </div>
-    </div><br>
-    <hr><br>
-    
-    <div class="logs-timeline">
-        <?php foreach ($groupedLogs as $day => $dayLogs): ?>
-            <div class="day-activities" data-day="<?php echo $day; ?>" style="<?php echo ($day === date('Y-m-d')) ? '' : 'display:none;'; ?>">
-                <div class="day-header">
-                    <h3>
-                        <?php 
-                        $today = date('Y-m-d');
-                        $yesterday = date('Y-m-d', strtotime('-1 day'));
-                        
-                        if ($day === $today) {
-                            echo 'Сегодня';
-                        } elseif ($day === $yesterday) {
-                            echo 'Вчера';
-                        } else {
-                            echo date('d.m.Y', strtotime($day));
-                        }
-                        ?>
-                    </h3>
-                    <span class="day-total"><?php echo count($dayLogs); ?> событий</span>
-                </div>
-                
-                <div class="logs-list">
-                    <?php foreach ($dayLogs as $log): 
-                        $category = getLogCategory($log['log_text']);
-                        list($icon, $color_class) = getLogIcon($log['log_text']);
-                    ?>
-                        <div class="log-item log-timeline-item <?php echo $category; ?>" data-category="<?php echo $category; ?>">
-                            <?php if ($icon === 'shield'): ?>
-                                <svg class="log-icon <?php echo $color_class; ?>" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
-                                </svg>
-                            <?php elseif ($icon === 'cross'): ?>
-                                <svg class="log-icon <?php echo $color_class; ?>" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                                </svg>
-                            <?php elseif ($icon === 'check'): ?>
-                                <svg class="log-icon <?php echo $color_class; ?>" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                                </svg>
-                            <?php else: ?>
-                                <svg class="log-icon <?php echo $color_class; ?>" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-                                </svg>
-                            <?php endif; ?>
-                            
-                            <div class="log-content">
-                                <div class="log-title">
-                                    <?php echo $log['log_text']; ?>
-                                    <span class="log-category <?php echo $category; ?>">
-                                        <?php echo $category === 'finance' ? 'Финансы' : 'Система'; ?>
-                                    </span>
-                                </div>
-                                <div class="log-time">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-                                    </svg>
-                                    <?php echo formatTimeAgo($log['created_at']); ?>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    </div>
-</div>
-
-</div>
-            </section>
-        <?php else: ?>
-            <div class="card">
-                <h2>Ожидание данных пользователя...</h2>
-                <p>Пожалуйста, подождите, пока загружаются ваши данные.</p>
-            </div>
-        <?php endif; ?>
-    </section>
-    <section id="groups-section" class="content-section <?php echo $active_section === 'groups' ? 'active' : ''; ?>">
-        <?php if ($from_id && $site): ?>
-            <section class="card">
-                <h2>Мои беседы</h2>
-                <div class="peers-list">
-                    <?php
-                    $stmt = $con->prepare("SELECT peer FROM tg_nlist WHERE tg_id = ?");
-                    $stmt->execute([$from_id]);
-                    $sites = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                <?php if (isset($message_counts) && isset($dates)): ?>
+                <div class="card">
+                    <h2 class="text-gradient">Статистика сообщений за последние 7 дней</h2>
                     
-                    if (count($sites) > 0) {
-                        foreach ($sites as $site): 
-                            if($site['peer'] == '-1002483132170') {
-                                $name = "Х🅾️ЗЯЕВ🅰️ | BO"; 
-                                $owner_name = "s69x😈";
-                                $owner_link = "samp69x";
+                    <?php
+                    $total_messages = array_sum($message_counts);
+                    $average_per_day = $total_messages > 0 ? round($total_messages / 7) : 0;
+                    $max_per_day = max($message_counts);
+                    ?>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                        <div class="info-row">
+                            <strong>Всего сообщений:</strong>
+                            <span><?php echo $total_messages; ?></span>
+                        </div>
+                        <div class="info-row">
+                            <strong>В среднем в день:</strong>
+                            <span><?php echo $average_per_day; ?></span>
+                        </div>
+                        <div class="info-row">
+                            <strong>Максимум в день:</strong>
+                            <span><?php echo $max_per_day; ?></span>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="messageChart"></canvas>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <?php if (isset($groupedLogs) && !empty($groupedLogs)): ?>
+                <div class="card">
+                    <h2 class="text-gradient">История действий</h2>
+                    
+                    <div class="days-tabs" style="display: flex; gap: 8px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 8px;">
+                        <?php 
+                        $first = true;
+                        foreach ($groupedLogs as $day => $dayLogs): 
+                            $today = date('Y-m-d');
+                            $yesterday = date('Y-m-d', strtotime('-1 day'));
+                            
+                            if ($day === $today) {
+                                $displayName = 'Сегодня';
+                            } elseif ($day === $yesterday) {
+                                $displayName = 'Вчера';
                             } else {
-                                $name = "#ВО || ХОЗЯЕВА || Массоны";
-                                $owner_name = "”david” 🥶 ";
-                                $owner_link = "david_dream";
+                                $displayName = date('d.m', strtotime($day));
                             }
                             
-                            $stmt = $con->prepare("SELECT date FROM all_message WHERE peer = ? ORDER BY date DESC LIMIT 1");
-                            $stmt->execute([$site['peer']]);
-                            $lastMessage = $stmt->fetch(PDO::FETCH_ASSOC);
-                            
-                            $sitepeer = $site['peer'];
-                            $response = file_get_contents(
-                                "https://api.telegram.org/bot7829579595:AAFYq5Qmo6dA6DA5jn9g2hKn-Uedt6jnB7A/getChatMemberCount?chat_id=$sitepeer"
-                            );
-                            $data = json_decode($response, true);
-                    ?>
-                    <div class="peer-item">
-                        <img src="/profile-icon.jpg" alt="Аватар беседы" class="peer-avatar">
-                        <div class="peer-details">
-                            <h3 class="peer-title"><?php echo $name; ?></h3>
-                            <div class="peer-meta">
-                                <span>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-                                    </svg>
-                                    Последняя активность: <?php echo $lastMessage['date']; ?>
+                            $financeCount = 0;
+                            $systemCount = 0;
+                            foreach ($dayLogs as $log) {
+                                if (strpos(strtolower($log['log_text']), 'деньги') !== false || 
+                                    strpos(strtolower($log['log_text']), 'ставк') !== false ||
+                                    strpos(strtolower($log['log_text']), 'выиграл') !== false ||
+                                    strpos(strtolower($log['log_text']), 'проиграл') !== false) {
+                                    $financeCount++;
+                                } else {
+                                    $systemCount++;
+                                }
+                            }
+                        ?>
+                            <button class="day-tab <?php echo $first ? 'active' : ''; ?>" data-day="<?php echo htmlspecialchars($day); ?>">
+                                <span style="display: block; font-weight: 600;"><?php echo htmlspecialchars($displayName); ?></span>
+                                <span style="font-size: 12px; color: var(--text-secondary);">
+                                    <?php echo count($dayLogs); ?> событий
                                 </span>
-                                <span>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                    </svg>
-                                    Владелец: <a href="https://t.me/<?php echo $owner_link; ?>"><?php echo $owner_name; ?></a>
-                                </span>
-                                <span>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-                                    </svg>
-                                    Участников: <?php echo $data["result"]; ?>
-                                </span>
+                            </button>
+                        <?php 
+                            $first = false;
+                        endforeach; 
+                        ?>
+                    </div>
+                    
+                    <div class="logs-timeline">
+                        <?php foreach ($groupedLogs as $day => $dayLogs): ?>
+                            <div class="day-activities" data-day="<?php echo htmlspecialchars($day); ?>" style="<?php echo ($day === date('Y-m-d')) ? '' : 'display:none;'; ?>">
+                                <?php foreach ($dayLogs as $log): 
+                                    $category = 'system';
+                                    if (strpos(strtolower($log['log_text']), 'деньги') !== false || 
+                                        strpos(strtolower($log['log_text']), 'ставк') !== false ||
+                                        strpos(strtolower($log['log_text']), 'выиграл') !== false ||
+                                        strpos(strtolower($log['log_text']), 'проиграл') !== false) {
+                                        $category = 'finance';
+                                    }
+                                    
+                                    $timeAgo = '';
+                                    if (isset($log['created_at'])) {
+                                        $now = new DateTime();
+                                        $date = new DateTime($log['created_at']);
+                                        $diff = $now->diff($date);
+                                        
+                                        if ($diff->days > 7) {
+                                            $timeAgo = date('d.m.Y', strtotime($log['created_at']));
+                                        } elseif ($diff->days > 0) {
+                                            $timeAgo = $diff->days . ' д. назад';
+                                        } elseif ($diff->h > 0) {
+                                            $timeAgo = $diff->h . ' ч. назад';
+                                        } elseif ($diff->i > 0) {
+                                            $timeAgo = $diff->i . ' мин. назад';
+                                        } else {
+                                            $timeAgo = 'только что';
+                                        }
+                                    }
+                                ?>
+                                    <div class="log-item <?php echo $category; ?>">
+                                        <div style="display: flex; align-items: flex-start; gap: 12px;">
+                                            <div style="
+                                                width: 32px;
+                                                height: 32px;
+                                                border-radius: 50%;
+                                                background: <?php echo $category === 'finance' ? 'var(--success)' : 'var(--info)'; ?>;
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;
+                                                flex-shrink: 0;
+                                            ">
+                                                <?php if ($category === 'finance'): ?>
+                                                    💰
+                                                <?php else: ?>
+                                                    ⚙️
+                                                <?php endif; ?>
+                                            </div>
+                                            <div style="flex: 1;">
+                                                <div style="color: var(--text); margin-bottom: 4px;">
+                                                    <?php echo htmlspecialchars($log['log_text']); ?>
+                                                </div>
+                                                <div style="color: var(--text-secondary); font-size: 14px; display: flex; justify-content: space-between;">
+                                                    <span><?php echo htmlspecialchars($category === 'finance' ? 'Финансы' : 'Система'); ?></span>
+                                                    <span><?php echo htmlspecialchars($timeAgo); ?></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
-                        </div>
-                        <div class="peer-actions">
-                            <a href="mini-app-infopeer?id=<?php echo urlencode($site['peer']); ?>" class="peer-button">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                                </svg>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+            <?php else: ?>
+                <div class="card">
+                    <h2>Ожидание данных пользователя...</h2>
+                    <p>Пожалуйста, подождите, пока загружаются ваши данные.</p>
+                </div>
+            <?php endif; ?>
+        </section>
+
+        <section id="groups-section" class="content-section <?php echo ($active_section ?? 'profile') === 'groups' ? 'active' : ''; ?>">
+            <?php if (isset($from_id) && isset($site)): ?>
+                <div class="card">
+                    <h2 class="text-gradient">Мои беседы</h2>
+                    <div class="peers-list">
+                        <?php
+                        if (isset($con)) {
+                            $stmt = $con->prepare("SELECT peer FROM tg_nlist WHERE tg_id = ?");
+                            $stmt->execute([$from_id]);
+                            $peers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                            
+                            if (count($peers) > 0) {
+                                foreach ($peers as $peer): 
+                                    if($peer['peer'] == '-1002483132170') {
+                                        $name = "Х🅾️ЗЯЕВ🅰️ | BO"; 
+                                        $owner_name = "s69x😈";
+                                        $owner_link = "samp69x";
+                                    } else {
+                                        $name = "#ВО || ХОЗЯЕВА || Массоны";
+                                        $owner_name = "”david” 🥶 ";
+                                        $owner_link = "david_dream";
+                                    }
+                                    
+                                    $stmt = $con->prepare("SELECT date FROM all_message WHERE peer = ? ORDER BY date DESC LIMIT 1");
+                                    $stmt->execute([$peer['peer']]);
+                                    $lastMessage = $stmt->fetch(PDO::FETCH_ASSOC);
+                                    
+                                    $sitepeer = $peer['peer'];
+                                    $response = @file_get_contents(
+                                        "https://api.telegram.org/bot7829579595:AAFYq5Qmo6dA6DA5jn9g2hKn-Uedt6jnB7A/getChatMemberCount?chat_id=$sitepeer"
+                                    );
+                                    $data = json_decode($response, true);
+                        ?>
+                        <div class="user-card">
+                            <div style="display: flex; align-items: center; gap: 16px; flex: 1;">
+                                <img src="/profile-icon.jpg" alt="Аватар беседы" style="width: 48px; height: 48px; border-radius: 50%;">
+                                <div>
+                                    <div style="font-weight: 600; margin-bottom: 4px;"><?php echo htmlspecialchars($name); ?></div>
+                                    <div style="color: var(--text-secondary); font-size: 14px;">
+                                        Участников: <?php echo $data["result"] ?? 'N/A'; ?> • 
+                                        Владелец: <a href="https://t.me/<?php echo htmlspecialchars($owner_link); ?>" style="color: var(--primary); text-decoration: none;">
+                                            <?php echo htmlspecialchars($owner_name); ?>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="mini-app-infopeer?id=<?php echo urlencode($peer['peer']); ?>" class="btn purple">
                                 Подробнее
                             </a>
                         </div>
+                        <?php endforeach; 
+                            } else { ?>
+                            <div style="text-align: center; padding: 48px 24px; color: var(--text-secondary);">
+                                <div style="font-size: 48px; margin-bottom: 16px;">💬</div>
+                                <p style="font-size: 18px; margin-bottom: 8px;">У вас пока что нет бесед</p>
+                                <p style="color: var(--text-secondary);">Но никогда не поздно добавиться :)</p>
+                            </div>
+                            <?php } 
+                        } else { ?>
+                            <div class="info-row">
+                                <strong>Ошибка подключения:</strong>
+                                <span>Не удалось загрузить список бесед</span>
+                            </div>
+                        <?php } ?>
                     </div>
-                    <?php endforeach; 
+                </div>
+            <?php else: ?>
+                <div class="card">
+                    <h2>Ожидание данных пользователя...</h2>
+                    <p>Пожалуйста, подождите, пока загружаются ваши данные.</p>
+                </div>
+            <?php endif; ?>
+        </section>
+
+        <section id="panel-section" class="content-section <?php echo ($active_section ?? 'profile') === 'panel' ? 'active' : ''; ?>">
+            <div class="card">
+                <h2 class="text-gradient">
+                    Заместители Онлайн
+                    <span id="refreshTimer" style="font-size: 14px; color: var(--text-secondary); float: right;">
+                        Обновление через: 5 сек
+                    </span>
+                </h2>
+                
+                <div class="user-list" id="onlineUsersList">
+                    <?php
+                    if (isset($online_list) && !empty($online_list)) {
+                        foreach($online_list as $nick => $data): ?>
+                        <div class="user-card">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; margin-bottom: 4px;"><?php echo htmlspecialchars($nick); ?></div>
+                                <div style="display: flex; gap: 16px; color: var(--text-secondary); font-size: 14px;">
+                                    <span>Онлайн за неделю: <?php echo isset($data['weekly']) ? htmlspecialchars($data['weekly']) : '0 мин'; ?></span>
+                                </div>
+                            </div>
+                            <div class="user-status <?php echo ($data['status'] === 'в сети') ? 'status-online' : 'status-offline'; ?>">
+                                <?php echo htmlspecialchars($data['status']); ?>
+                            </div>
+                        </div>
+                        <?php endforeach;
                     } else { ?>
-                    <div class="empty-state">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-                        </svg>
-                        <p>У вас пока что нету бесед, но никогда не поздно добавится :)</p>
-                    </div>
+                        <div style="text-align: center; padding: 32px; color: var(--text-secondary);">
+                            Нет данных о заместителях
+                        </div>
                     <?php } ?>
                 </div>
-            </section>
-        <?php else: ?>
+            </div>
+
+            <?php if (isset($sitecheck) && $sitecheck && $sitecheck['is_admin'] >= 1): ?>
             <div class="card">
-                <h2>Ожидание данных пользователя...</h2>
-                <p>Пожалуйста, подождите, пока загружаются ваши данные.</p>
-            </div>
-        <?php endif; ?>
-    </section>
-
-<section id="panel-section" class="content-section <?php echo $active_section === 'panel' ? 'active' : ''; ?>">
-    <section class="card">
-        <h2>
-            Заместители Онлайн
-            <span id="refreshTimer" style="font-size: 14px; color: var(--text-light); margin-left: auto;">
-                Обновление через: 3 сек
-            </span>
-        </h2>
-        
-        <div class="user-list" id="onlineUsersList">
-            <?php
-            $deputies_file = __DIR__ . "/json/zams_inonline.json";
-            $online_list = [];
-            $offline_list = [];
-            
-            if (file_exists($deputies_file)) {
-                $data = json_decode(file_get_contents($deputies_file), true);
+                <h2 class="text-gradient">Действия с пользователями</h2>
                 
-                if (is_array($data)) {
-                    $now = time();
+                <form id="userActionForm" style="margin-top: 24px;">
+                    <div class="form-group">
+                        <label class="form-label">Введите ник пользователя:</label>
+                        <input type="text" name="target_nick" class="form-input" placeholder="Ник пользователя" required>
+                    </div>
                     
-                    $weekly_stats = [];
-                    try {
-                        $stmt = $con->prepare("SELECT nick, minut FROM online_zames WHERE 1");
-                        $stmt->execute();
-                        $stats_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                        
-                        foreach ($stats_data as $stat) {
-                            $weekly_stats[$stat['nick']] = $stat['minut'];
-                        }
-                    } catch (Exception $e) {
-                        error_log("Error fetching weekly stats: " . $e->getMessage());
-                    }
-                    
-                    foreach ($data as $nick => $last_seen) {
-                        $last_seen_diff = $now - $last_seen;
-                        $weekly_online = isset($weekly_stats[$nick]) ? $weekly_stats[$nick] : 0;
-                        
-                        if ($last_seen_diff <= 70) {
-                            $online_list[$nick] = [
-                                'status' => "в сети",
-                                'weekly' => $weekly_online
-                            ];
-                        } else {
-                            $last_seen_str = formatDuration($last_seen_diff);
-                            $offline_list[$nick] = [
-                                'status' => "был $last_seen_str назад",
-                                'weekly' => $weekly_online
-                            ];
-                        }
-                    }
-                }
-            }
-            
-            function formatDuration($seconds) {
-                $units = [
-                    'день' => 86400,
-                    'час' => 3600,
-                    'мин' => 60,
-                    'сек' => 1
-                ];
-                
-                $result = [];
-                foreach ($units as $name => $divisor) {
-                    if ($quot = intval($seconds / $divisor)) {
-                        $result[] = $quot . ' ' . $name;
-                        $seconds %= $divisor;
-                    }
-                }
-                
-                return implode(' ', $result);
-            }
-            
-            function formatWeeklyTime($minutes) {
-                if ($minutes < 60) {
-                    return $minutes . ' мин';
-                } else {
-                    $hours = floor($minutes / 60);
-                    $remaining_minutes = $minutes % 60;
-                    if ($remaining_minutes > 0) {
-                        return $hours . ' ч ' . $remaining_minutes . ' мин';
-                    } else {
-                        return $hours . ' ч';
-                    }
-                }
-            }
-            
-            if (!empty($online_list)) {
-                foreach($online_list as $nick => $data): ?>
-                <div class="user-card">
-                    <div class="user-header">
-                        <div class="user-name"><?php echo htmlspecialchars($nick); ?></div>
-                        <div class="user-status status-online">
-                            <?php echo $data['status']; ?>
-                        </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 24px;">
+                        <button type="button" class="btn purple" onclick="openModal('rankModal')">
+                            Сменить ранг
+                        </button>
+                        <button type="button" class="btn warning" onclick="openModal('warningModal')">
+                            Выдать выговор
+                        </button>
+                        <button type="button" class="btn warning" onclick="openModal('muteModal')">
+                            Выдать мут
+                        </button>
+                        <button type="button" class="btn danger" onclick="openModal('banModal')">
+                            Заблокировать
+                        </button>
+                        <button type="button" class="btn danger" onclick="openModal('kickModal')">
+                            Исключить
+                        </button>
                     </div>
-                    <div class="user-stats">
-                        <span class="weekly-stats">Онлайн за неделю: <?php echo formatWeeklyTime($data['weekly']); ?></span>
-                    </div>
-                </div>
-                <?php endforeach;
-            }
-            
-            if (!empty($offline_list)) {
-                foreach($offline_list as $nick => $data): ?>
-                <div class="user-card">
-                    <div class="user-header">
-                        <div class="user-name"><?php echo htmlspecialchars($nick); ?></div>
-                        <div class="user-status status-offline">
-                            <?php echo $data['status']; ?>
-                        </div>
-                    </div>
-                    <div class="user-stats">
-                        <span class="weekly-stats">Онлайн за неделю: <?php echo formatWeeklyTime($data['weekly']); ?></span>
-                    </div>
-                </div>
-                <?php endforeach;
-            }
-            ?>
-        </div>
-    </section>
-
-<?php
-$stmt = $con->prepare("SELECT * FROM tg_nlist WHERE tg_id = ?");
-$stmt->execute([$from_id]);
-$sitecheck = $stmt->fetch(PDO::FETCH_ASSOC);
-if ($from_id && $sitecheck && $sitecheck['is_admin'] >= 1): ?>
-<section class="card">
-    <h2>Действия с пользователями</h2>
-    
-    <div class="action-section">
-        <form class="action-form" id="userActionForm">
-            <div class="form-group">
-                <label class="form-label">Введите ник пользователя:</label>
-                <input type="text" name="target_nick" class="form-input" placeholder="Ник пользователя">
+                </form>
             </div>
-            <div class="action-buttons">
-                <button type="button" class="btn purple" onclick="openModal('rankModal')">
-                    Сменить ранг
-                </button>
-                <button type="button" class="btn warning" onclick="openModal('warningModal')">
-                    Выдать выговор
-                </button>
-                <button type="button" class="btn warning" onclick="openModal('muteModal')">
-                    Выдать бан чата
-                </button>
-                <button type="button" class="btn danger" onclick="openModal('banModal')">
-                    Заблокировать
-                </button>
-                <button type="button" class="btn danger" onclick="openModal('kickModal')">
-                    Исключить из семьи
-                </button>
-            </div>
-        </form>
+            <?php endif; ?>
+        </section>
     </div>
-</section>
-<?php if ($sitecheck['is_admin'] >= 1): ?>
-<?php
-$modals = [
-    '404'=>['title'=>'404','fields'=>[
-    ]],
-    'warningModal'=>['title'=>'Выдать предупреждение','fields'=>[
-        ['label'=>'Ник','name'=>'target_nick','type'=>'text','required'=>true],
-        ['label'=>'Причина','name'=>'warning_reason','type'=>'text','required'=>true]
-    ]],
-    'muteModal'=>['title'=>'Выдать семейный мут','fields'=>[
-        ['label'=>'Ник','name'=>'target_nick','type'=>'text','required'=>true],
-        ['label'=>'Минуты','name'=>'mute_minutes','type'=>'number','required'=>true,'min'=>2,'max'=>180]
-    ]],
-    'banModal'=>['title'=>'Выдать блокировку','fields'=>[
-        ['label'=>'Ник','name'=>'target_nick','type'=>'text','required'=>true],
-        ['label'=>'Причина','name'=>'ban_reason','type'=>'text','required'=>true]
-    ]],
-    'kickModal'=>['title'=>'Кикнуть пользователя','fields'=>[
-        ['label'=>'Ник','name'=>'target_nick','type'=>'text','required'=>true]
-    ]],
-    'rankModal'=>['title'=>'Сменить ранг','fields'=>[
-        ['label'=>'Ник','name'=>'target_nick','type'=>'text','required'=>true],
-        ['label'=>'Новый ранг','name'=>'rank','type'=>'select','options'=>[
-            '' => '-- Выберите ранг --', 
-            3 => '🔧 Хозяетрудник',
-            4 => '🛡️ Хозяестраж',
-            5 => '🎓 Хозяемастер',
-            7 => '👶 Пупсик', 
-            8 => '💰 $ Мажор $',
-            9 => '👔 Заместитель',
-            10 => '👑 Гл.ХОЗЯUH',
-            11 => '👤 Гл.Заместитель'
-        ], 'required' => true, 'default' => 3]
-    ]],
-];
-?>
 
-<?php foreach($modals as $id=>$modal): ?>
-<div id="<?php echo $id;?>" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title"><?php echo $modal['title'];?></h3>
-            <span class="close" onclick="closeModal('<?php echo $id;?>')">&times;</span>
+    <!-- Модальные окна -->
+    <?php if (isset($sitecheck) && $sitecheck && $sitecheck['is_admin'] >= 1): ?>
+    <div id="warningModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Выдать предупреждение</h3>
+                <span class="close" onclick="closeModal('warningModal')">&times;</span>
+            </div>
+            <form class="ajax-form" data-action="warning">
+                <div class="form-group">
+                    <label class="form-label">Ник пользователя:</label>
+                    <input type="text" name="target_nick" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Причина:</label>
+                    <input type="text" name="warning_reason" class="form-input" required>
+                </div>
+                <div style="display: flex; gap: 12px; margin-top: 32px;">
+                    <button type="button" class="btn danger" onclick="closeModal('warningModal')" style="flex: 1;">Отмена</button>
+                    <button type="submit" class="btn" style="flex: 1;">Подтвердить</button>
+                </div>
+            </form>
         </div>
-        
-        <form class="ajax-form" data-action="<?php echo str_replace('Modal', '', $id); ?>">
-            <input type="hidden" name="ajax_action" value="1">
-            <input type="hidden" name="action" value="<?php echo str_replace('Modal', '', $id); ?>">
-            
-            <?php foreach($modal['fields'] as $field): ?>
-            <div class="form-group-modal">
-                <label class="form-label-modal"><?php echo $field['label'];?></label>
-                <?php if($field['type']==='select'): ?>
-                <select name="<?php echo $field['name'];?>" class="form-select-modal" 
-                        <?php echo ($field['required']??false)?'required':'';?>>
-                    <?php foreach($field['options'] as $val=>$label): ?>
-                    <option value="<?php echo $val;?>" 
-                            <?php echo (isset($field['default']) && $field['default'] == $val)?'selected':'';?>>
-                        <?php echo $label;?>
-                    </option>
-                    <?php endforeach;?>
-                </select>
-                <?php else: ?>
-                <input type="<?php echo $field['type'];?>" name="<?php echo $field['name'];?>" class="form-input-modal"
-                    <?php echo ($field['required']??false)?'required':'';?>
-                    <?php echo isset($field['min'])?' min="'.$field['min'].'"':'';?>
-                    <?php echo isset($field['max'])?' max="'.$field['max'].'"':'';?>
-                    <?php echo $field['type'] === 'text' ? 'placeholder="Введите '.$field['label'].'"' : '';?>>
-                <?php endif;?>
-            </div>
-            <?php endforeach;?>
-            
-            <div class="form-actions">
-                <button type="button" class="btn danger" onclick="closeModal('<?php echo $id;?>')">Отмена</button>
-                <button type="submit" class="btn">Подтвердить</button>
-            </div>
-        </form>
     </div>
-</div>
-<?php endforeach; ?>
-<?php endif; ?>
 
-<?php else: ?>
-<?php endif; ?>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const tg = window.Telegram.WebApp;
-    const fromIdExists = <?php echo $from_id ? 'true' : 'false'; ?>;
-    
-    const loadingOverlay = document.getElementById('loading-overlay');
-    loadingOverlay.style.display = 'flex';
-    
-    setTimeout(() => {
-        loadingOverlay.classList.add('hiding');
-        setTimeout(() => {
-            loadingOverlay.style.display = 'none';
-            loadingOverlay.classList.remove('hiding');
-        }, 300);
-    }, 1000);
-    
-    document.querySelectorAll('.radio-inputs input[type="radio"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            if (this.checked) {
-                const section = this.getAttribute('data-section');
-                
-                loadingOverlay.style.display = 'flex';
-                
-                document.querySelectorAll('.content-section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                
-                setTimeout(() => {
-                    document.getElementById(section + '-section').classList.add('active');
-                    
-                    loadingOverlay.classList.add('hiding');
-                    setTimeout(() => {
-                        loadingOverlay.style.display = 'none';
-                        loadingOverlay.classList.remove('hiding');
-                    }, 300);
-                    
-                    const url = new URL(window.location);
-                    url.searchParams.set('section', section);
-                    window.history.replaceState({}, '', url);
-                }, 500);
-            }
-        });
-    });
-    
-    if (!fromIdExists) {
-        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            const user = tg.initDataUnsafe.user;
-            console.log('Telegram user found:', user.id);
-            
-            fetch('', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ from_id: user.id })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Data sent successfully:', data);
-                if (data.success) {
-                    window.location.reload();
-                }
-            })
-            .catch(error => {
-                console.error('Error sending data:', error);
-                document.querySelector('main.content').innerHTML = `
-                    <div class="card">
-                        <h2>Ошибка загрузки</h2>
-                        <p>Не удалось загрузить данные пользователя. Пожалуйста, обновите страницу.</p>
-                        <button onclick="window.location.reload()" class="btn">Обновить страницу</button>
-                    </div>
-                `;
-            });
-        } else {
-            console.log('Telegram WebApp not initialized');
-            setTimeout(() => {
-                window.location.reload();
-            }, 3000);
-        }
-    }
-    
-    <?php if (isset($dates) && isset($message_counts)): ?>
-    const ctx = document.getElementById('messageChart');
-    if (ctx) {
-        const messageChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: <?php echo json_encode($dates); ?>,
-                datasets: [{
-                    label: 'Сообщений',
-                    data: <?php echo json_encode($message_counts); ?>,
-                    backgroundColor: 'rgba(112, 42, 204, 0.6)',
-                    borderColor: 'rgba(112, 42, 204, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
-    
-    // Фильтрация логов
-    document.querySelectorAll('.logs-filters .filter-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const filter = this.getAttribute('data-filter');
-            
-            document.querySelectorAll('.logs-filters .filter-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            
-            document.querySelectorAll('.log-item').forEach(item => {
-                if (filter === 'all' || item.getAttribute('data-category') === filter) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        });
-    });
-    
-    // Переключение дней в логах
-    document.querySelectorAll('.day-tab').forEach(tab => {
-        tab.addEventListener('click', function() {
-            const day = this.getAttribute('data-day');
-            
-            document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            
-            document.querySelectorAll('.day-activities').forEach(dayEl => {
-                dayEl.style.display = dayEl.getAttribute('data-day') === day ? 'block' : 'none';
-            });
-        });
-    });
+    <div id="rankModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Сменить ранг</h3>
+                <span class="close" onclick="closeModal('rankModal')">&times;</span>
+            </div>
+            <form class="ajax-form" data-action="rank">
+                <div class="form-group">
+                    <label class="form-label">Ник пользователя:</label>
+                    <input type="text" name="target_nick" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Новый ранг:</label>
+                    <select name="rank" class="form-select" required>
+                        <option value="">-- Выберите ранг --</option>
+                        <option value="3">🔧 Хозяетрудник</option>
+                        <option value="4">🛡️ Хозяестраж</option>
+                        <option value="5">🎓 Хозяемастер</option>
+                        <option value="7">👶 Пупсик</option>
+                        <option value="8">💰 $ Мажор $</option>
+                        <option value="9">👔 Заместитель</option>
+                        <option value="10">👑 Гл.ХОЗЯИН</option>
+                        <option value="11">👤 Гл.Заместитель</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 12px; margin-top: 32px;">
+                    <button type="button" class="btn danger" onclick="closeModal('rankModal')" style="flex: 1;">Отмена</button>
+                    <button type="submit" class="btn" style="flex: 1;">Подтвердить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Другие модальные окна по аналогии -->
     <?php endif; ?>
-});
 
-let refreshTimer = 5;
-let timerInterval;
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализация навигации
+            const radios = document.querySelectorAll('input[name="radio"]');
+            const sections = document.querySelectorAll('.content-section');
+            const loadingOverlay = document.getElementById('loading-overlay');
 
-function openModal(id) {
-    const mainFormNick = document.querySelector('input[name="target_nick"]').value;
-    const modalInput = document.querySelector('#' + id + ' input[name="target_nick"]');
-    
-    if (modalInput && mainFormNick) {
-        modalInput.value = mainFormNick;
-    }
-    
-    document.getElementById(id).style.display = 'block';
-}
+            radios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        const sectionId = this.dataset.section;
+                        
+                        // Показываем загрузку
+                        loadingOverlay.style.display = 'flex';
+                        
+                        // Скрываем все секции
+                        sections.forEach(section => {
+                            section.classList.remove('active');
+                        });
+                        
+                        // Показываем выбранную секцию
+                        setTimeout(() => {
+                            document.getElementById(`${sectionId}-section`).classList.add('active');
+                            loadingOverlay.style.display = 'none';
+                            
+                            // Обновляем URL без перезагрузки
+                            const url = new URL(window.location);
+                            url.searchParams.set('section', sectionId);
+                            window.history.replaceState({}, '', url);
+                        }, 300);
+                    }
+                });
+            });
 
-function closeModal(id) { 
-    document.getElementById(id).style.display = 'none'; 
-}
+            // Переключение дней в логах
+            const dayTabs = document.querySelectorAll('.day-tab');
+            const dayActivities = document.querySelectorAll('.day-activities');
 
-function showToast(message, type = 'success') {
-    const toastContainer = document.getElementById('toastContainer');
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    
-    const icons = {
-        success: '✅',
-        error: '❌',
-        warning: '⚠️'
-    };
-    
-    toast.innerHTML = `
-<div class="card1 ${type}">
-  <svg class="wave" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M0,256L11.4,240C22.9,224,46,192,69,192C91.4,192,114,224,137,234.7C160,245,183,235,206,213.3C228.6,192,251,160,274,149.3C297.1,139,320,149,343,181.3C365.7,213,389,267,411,282.7C434.3,299,457,277,480,250.7C502.9,224,526,192,549,181.3C571.4,171,594,181,617,208C640,235,663,277,686,256C708.6,235,731,149,754,122.7C777.1,96,800,128,823,165.3C845.7,203,869,245,891,224C914.3,203,937,117,960,112C982.9,107,1006,181,1029,197.3C1051.4,213,1074,171,1097,144C1120,117,1143,107,1166,133.3C1188.6,160,1211,224,1234,218.7C1257.1,213,1280,139,1303,133.3C1325.7,128,1349,192,1371,192C1394.3,192,1417,128,1429,96L1440,64L1440,320L0,320Z"
-      fill-opacity="1"
-    ></path>
-  </svg>
+            dayTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const day = this.dataset.day;
+                    
+                    // Убираем активный класс у всех табов
+                    dayTabs.forEach(t => t.classList.remove('active'));
+                    // Добавляем активный класс текущему табу
+                    this.classList.add('active');
+                    
+                    // Показываем выбранный день, скрываем остальные
+                    dayActivities.forEach(activity => {
+                        activity.style.display = activity.dataset.day === day ? 'block' : 'none';
+                    });
+                });
+            });
 
-  <div class="icon-container">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 512 512"
-      class="icon success-icon"
-      style="display: ${type === 'success' ? 'block' : 'none'}"
-    >
-      <path
-        d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L369 209z"
-      ></path>
-    </svg>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 15 15"
-      class="icon error-icon"
-      style="display: ${type === 'error' ? 'block' : 'none'}"
-    >
-      <path
-        fill="currentColor"
-        d="M11.78 4.03c.22-.22.22-.59 0-.81a.574.574 0 0 0-.81 0L7.5 6.69 4.03 3.22a.574.574 0 0 0-.81 0c-.22.22-.22.59 0 .81L6.69 7.5l-3.47 3.47a.574.574 0 0 0 0 .81c.22.22.59.22.81 0L7.5 8.31l3.47 3.47c.22.22.59.22.81 0 .22-.22.22-.59 0-.81L8.31 7.5l3.47-3.47z"
-      />
-    </svg>
-  </div>
+            // График сообщений
+            <?php if (isset($message_counts) && isset($dates)): ?>
+            const ctx = document.getElementById('messageChart');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: <?php echo json_encode($dates); ?>,
+                        datasets: [{
+                            label: 'Сообщений',
+                            data: <?php echo json_encode($message_counts); ?>,
+                            backgroundColor: 'rgba(139, 92, 246, 0.6)',
+                            borderColor: 'rgba(139, 92, 246, 1)',
+                            borderWidth: 1,
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#f1f5f9'
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: '#94a3b8'
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#94a3b8'
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            <?php endif; ?>
 
-  <div class="message-text-container">
-    <p class="message-text">${type === 'success' ? 'Успешно!' : 'Ошибка!'}</p>
-    <p class="sub-text">${message}</p>
-  </div>
-</div>
+            // Таймер обновления
+            let refreshTimer = 5;
+            const timerElement = document.getElementById('refreshTimer');
+            
+            function updateTimer() {
+                if (timerElement) {
+                    refreshTimer--;
+                    timerElement.textContent = `Обновление через: ${refreshTimer} сек`;
+                    
+                    if (refreshTimer <= 0) {
+                        refreshTimer = 5;
+                        // Здесь можно добавить обновление данных
+                    }
+                }
+            }
+            
+            setInterval(updateTimer, 1000);
 
-    `;
-    
-    toastContainer.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.classList.add('show');
-    }, 10);
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-        toast.classList.add('hide');
-        setTimeout(() => {
-            if (toast.parentElement) {
+            // Telegram Web App
+            if (window.Telegram && Telegram.WebApp) {
+                Telegram.WebApp.ready();
+                Telegram.WebApp.expand();
+                Telegram.WebApp.setBackgroundColor('#0f172a');
+                Telegram.WebApp.setHeaderColor('#0f172a');
+            }
+
+            // Отправка форм
+            const forms = document.querySelectorAll('.ajax-form');
+            forms.forEach(form => {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.textContent;
+                    submitBtn.textContent = 'Отправка...';
+                    submitBtn.disabled = true;
+                    
+                    try {
+                        const formData = new FormData(this);
+                        const response = await fetch('', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        
+                        const result = await response.json();
+                        showToast(result.message || 'Успешно!', result.success ? 'success' : 'error');
+                        
+                        if (result.success) {
+                            closeModal(this.dataset.action + 'Modal');
+                            this.reset();
+                        }
+                    } catch (error) {
+                        showToast('Ошибка сети', 'error');
+                    } finally {
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                    }
+                });
+            });
+        });
+
+        // Функции для модальных окон
+        function openModal(id) {
+            const mainFormNick = document.querySelector('input[name="target_nick"]').value;
+            const modalInput = document.querySelector(`#${id} input[name="target_nick"]`);
+            
+            if (modalInput && mainFormNick) {
+                modalInput.value = mainFormNick;
+            }
+            
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // Функция для показа уведомлений
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            
+            document.getElementById('toastContainer').appendChild(toast);
+            
+            setTimeout(() => {
                 toast.remove();
-            }
-        }, 300);
-    }, 5000);
-}
-
-function updateOnlineStatus() {
-    fetch(window.location.href, {
-        method: 'GET',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
+            }, 5000);
         }
-    })
-    .then(response => response.text())
-    .then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const newUserList = doc.getElementById('onlineUsersList');
-        
-        if (newUserList) {
-            document.getElementById('onlineUsersList').innerHTML = newUserList.innerHTML;
-        }
-        
-        refreshTimer = 5;
-        updateTimerDisplay();
-    })
-    .catch(error => {
-        console.error('Ошибка при обновлении статуса:', error);
-        showToast('Ошибка при обновлении статуса', 'error');
-    });
-}
 
-function updateTimerDisplay() {
-    const timerElement = document.getElementById('refreshTimer');
-    if (timerElement) {
-        timerElement.textContent = `Обновление через: ${refreshTimer} сек`;
-    }
-}
-
-async function handleFormSubmit(form, action) {
-    console.log('Обработка формы:', action);
-    
-    const requiredInputs = form.querySelectorAll('[required]');
-    let isValid = true;
-    
-    requiredInputs.forEach(input => {
-        console.log('Проверка поля:', input.name, 'значение:', input.value);
-        if (!input.value.trim()) {
-            isValid = false;
-            input.style.borderColor = 'red';
-            console.log('Поле не заполнено:', input.name);
-        } else {
-            input.style.borderColor = '';
-        }
-    });
-    
-    if (!isValid) {
-        showToast('Заполните все обязательные поля', 'error');
-        return;
-    }
-    
-    const formData = new FormData(form);
-    formData.append('ajax', 1);
-    
-    for (let [key, value] of formData.entries()) {
-        console.log(key + ': ' + value);
-    }
-    
-    const submitButton = form.querySelector('button[type="submit"]');
-    const originalText = submitButton.innerHTML;
-    submitButton.innerHTML = 'Загрузка...'; 
-    submitButton.disabled = true;
-
-    try {
-        console.log('Отправка запроса...');
-        const response = await fetch('', {
-            method: 'POST', 
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
+        // Закрытие модальных окон при клике вне их
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
             }
         });
-        
-        console.log('Ответ получен, статус:', response.status);
-        const result = await response.json();
-        console.log('Результат:', result);
-        
-        if(result.success){
-            showToast(result.message,'success');
-            closeModal(action+'Modal');
-        }else{
-            showToast(result.message,'error');
-        }
-    } catch(e){
-        console.error('Ошибка сети:', e);
-        showToast('Ошибка сети','error');
-    } finally{
-        submitButton.innerHTML = originalText;
-        submitButton.disabled = false;
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.ajax-form').forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const action = this.getAttribute('data-action');
-            handleFormSubmit(this, action);
-        });
-    });
-    
-    updateTimerDisplay();
-    timerInterval = setInterval(function() {
-        refreshTimer--;
-        updateTimerDisplay();
-        
-        if (refreshTimer <= 0) {
-            updateOnlineStatus();
-        }
-    }, 1000);
-    
-    document.querySelectorAll('.modal').forEach(modal => {
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal(this.id);
-            }
-        });
-    });
-});
-
-window.addEventListener('beforeunload', function() {
-    if (timerInterval) {
-        clearInterval(timerInterval);
-    }
-});
-</script>
-
+    </script>
 </body>
 </html>
